@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>الطريق الذكي الزهراني | </title>
+    <title>الطريق الذكي الزهراني | نظام إدارة الأسطول المتطور</title>
     
     <!-- Firebase SDK v10.8.0 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -274,7 +274,7 @@
         }
         
         /* ==================================================================== */
-        /* PROGRESS OVERLAY - محسن بالكامل                                     */
+        /* PROGRESS OVERLAY - محسن نهائي                                         */
         /* ==================================================================== */
         .progress-overlay {
             position: fixed;
@@ -322,6 +322,7 @@
             margin: 0 auto 20px;
             font-size: 40px;
             color: white;
+            animation: pulse 2s infinite;
         }
         
         .progress-title {
@@ -390,6 +391,31 @@
         .quick-save-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* ==================================================================== */
+        /* RETRY BUTTON - زر إعادة المحاولة                                     */
+        /* ==================================================================== */
+        .retry-btn {
+            background: linear-gradient(145deg, var(--warning-amber), #b45309);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.5);
         }
         
         /* ==================================================================== */
@@ -1250,7 +1276,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PROGRESS OVERLAY - محسن بالكامل            -->
+    <!-- PROGRESS OVERLAY - محسن نهائي              -->
     <!-- ========================================== -->
     <div id="progressOverlay" class="progress-overlay">
         <div class="progress-card">
@@ -1266,6 +1292,9 @@
                 <i class="fas fa-spinner fa-spin"></i>
                 <span>0%</span>
             </div>
+            <button id="retryUploadBtn" class="retry-btn hidden">
+                <i class="fas fa-redo-alt"></i> إعادة المحاولة
+            </button>
         </div>
     </div>
 
@@ -1516,7 +1545,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: DELEGATE REFUEL - مع حفظ سريع     -->
+        <!-- PAGE: DELEGATE REFUEL - مع حفظ محسن      -->
         <!-- ====================================== -->
         <div id="pageDelegateRefuel" class="page">
             <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
@@ -1833,16 +1862,35 @@
         // ====================================================================
         // PROGRESS FUNCTIONS
         // ====================================================================
+        let uploadTimeout = null;
+        let currentSaveFunction = null;
+        let retryCount = 0;
+        
         function showProgress(step, percent) {
             const overlay = document.getElementById('progressOverlay');
             const stepEl = document.getElementById('progressStep');
             const barEl = document.getElementById('progressBar');
             const statusEl = document.getElementById('progressStatus');
+            const retryBtn = document.getElementById('retryUploadBtn');
             
             overlay.classList.add('active');
             stepEl.innerText = step;
             barEl.style.width = percent + '%';
             statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>${percent}%</span>`;
+            
+            // إخفاء زر إعادة المحاولة
+            retryBtn.classList.add('hidden');
+            
+            // تعيين مؤقت للتحقق من التقدم
+            if (uploadTimeout) clearTimeout(uploadTimeout);
+            
+            uploadTimeout = setTimeout(() => {
+                if (percent < 100 && percent > 0) {
+                    // إذا كان التقدم عالقاً لأكثر من 15 ثانية
+                    stepEl.innerText = '⚠️ يبدو أن الرفع يستغرق وقتاً طويلاً';
+                    retryBtn.classList.remove('hidden');
+                }
+            }, 15000);
         }
 
         function updateProgress(step, percent) {
@@ -1853,9 +1901,19 @@
             stepEl.innerText = step;
             barEl.style.width = percent + '%';
             statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>${percent}%</span>`;
+            
+            // إعادة تعيين المؤقت
+            if (uploadTimeout) clearTimeout(uploadTimeout);
+            uploadTimeout = setTimeout(() => {
+                if (percent < 100 && percent > 0) {
+                    stepEl.innerText = '⚠️ يبدو أن الرفع يستغرق وقتاً طويلاً';
+                    document.getElementById('retryUploadBtn').classList.remove('hidden');
+                }
+            }, 15000);
         }
 
         function hideProgress() {
+            if (uploadTimeout) clearTimeout(uploadTimeout);
             document.getElementById('progressOverlay').classList.remove('active');
         }
 
@@ -2086,16 +2144,22 @@
         }
 
         // ====================================================================
-        // التقاط الصور
+        // التقاط الصور - بحجم صغير للسرعة
         // ====================================================================
         async function captureImage(type) {
             const video = document.getElementById('cameraPreview');
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
             
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.7)); // تقليل الجودة للسرعة
+            // تصغير حجم الصورة للسرعة
+            const maxWidth = 800;
+            const scale = Math.min(maxWidth / video.videoWidth, 1);
+            canvas.width = video.videoWidth * scale;
+            canvas.height = video.videoHeight * scale;
+            
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // ضغط عالي للسرعة
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.6));
             const url = URL.createObjectURL(blob);
             
             const thumb = document.createElement('img');
@@ -2120,7 +2184,7 @@
         }
 
         // ====================================================================
-        // تسجيل الفيديو
+        // تسجيل الفيديو - بجودة منخفضة للسرعة
         // ====================================================================
         function startVideoRecording() {
             if (!mediaStream) {
@@ -2133,7 +2197,7 @@
             
             mediaRecorder = new MediaRecorder(mediaStream, {
                 mimeType: 'video/webm;codecs=vp9',
-                videoBitsPerSecond: 500000, // تقليل الجودة للسرعة
+                videoBitsPerSecond: 250000, // جودة منخفضة للسرعة
                 audioBitsPerSecond: 0
             });
             
@@ -2170,8 +2234,17 @@
         }
 
         // ====================================================================
-        // رفع ملف واحد مع تتبع التقدم
+        // رفع ملف واحد مع مهلة زمنية
         // ====================================================================
+        function uploadMediaWithTimeout(blob, path, timeout = 15000) {
+            return Promise.race([
+                uploadMedia(blob, path),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('انتهت مهلة الرفع')), timeout)
+                )
+            ]);
+        }
+
         function uploadMedia(blob, path) {
             return new Promise((resolve, reject) => {
                 const ref = storage.ref().child(path);
@@ -2189,16 +2262,31 @@
                     () => {
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                             resolve(downloadURL);
-                        });
+                        }).catch(reject);
                     }
                 );
             });
         }
 
         // ====================================================================
-        // حفظ سريع محسن
+        // إعادة المحاولة
+        // ====================================================================
+        document.getElementById('retryUploadBtn').addEventListener('click', () => {
+            if (currentSaveFunction) {
+                retryCount++;
+                hideProgress();
+                setTimeout(() => {
+                    currentSaveFunction();
+                }, 500);
+            }
+        });
+
+        // ====================================================================
+        // حفظ سريع محسن - مع إعادة محاولة تلقائية
         // ====================================================================
         async function quickSaveOperation() {
+            currentSaveFunction = quickSaveOperation;
+            
             if (!currentUser) {
                 alert('الرجاء تسجيل الدخول');
                 return;
@@ -2215,28 +2303,45 @@
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
-                // تقليل حجم الصور
-                updateProgress('جاري تحسين جودة الصور...', 20);
-                
-                // رفع الملفات بشكل متوازي
+                // رفع الملفات بشكل متوازي مع مهلة زمنية
                 updateProgress('جاري رفع الملفات...', 30);
                 
                 const startTime = Date.now();
                 
-                const uploadPromises = [
-                    uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
-                    uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
-                    uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
-                    uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
-                ];
+                // محاولة الرفع مع إعادة المحاولة التلقائية
+                let uploadSuccess = false;
+                let uploadError = null;
+                let plateURL, beforeURL, afterURL, videoURL;
                 
-                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.race([
-                    Promise.all(uploadPromises),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('انتهت مهلة الرفع')), 30000))
-                ]);
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    try {
+                        updateProgress(`محاولة الرفع ${attempt}/3...`, 30 + (attempt * 10));
+                        
+                        [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
+                            uploadMediaWithTimeout(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`, 15000)
+                        ]);
+                        
+                        uploadSuccess = true;
+                        break;
+                    } catch (error) {
+                        uploadError = error;
+                        console.log(`❌ محاولة ${attempt} فشلت:`, error);
+                        
+                        if (attempt < 3) {
+                            updateProgress(`إعادة المحاولة ${attempt + 1}/3...`, 30);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        }
+                    }
+                }
+                
+                if (!uploadSuccess) {
+                    throw new Error(uploadError || 'فشل رفع الملفات بعد 3 محاولات');
+                }
                 
                 const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
-                console.log(`✅ تم رفع الملفات في ${uploadTime} ثانية`);
                 
                 updateProgress('جاري حفظ البيانات...', 80);
                 
@@ -2256,7 +2361,8 @@
                     videoDuration: 30,
                     isSuspicious: false,
                     quickSave: true,
-                    uploadTime: uploadTime
+                    uploadTime: uploadTime,
+                    retryCount: retryCount
                 };
                 
                 await database.ref('operations').push(operation);
@@ -2266,6 +2372,7 @@
                 setTimeout(() => {
                     hideProgress();
                     alert(`✅ تم حفظ العملية بنجاح في ${uploadTime} ثانية`);
+                    retryCount = 0;
                 }, 500);
                 
                 // إعادة تعيين
@@ -2276,7 +2383,14 @@
             } catch (error) {
                 console.error('Save error:', error);
                 hideProgress();
-                alert('❌ خطأ في حفظ العملية: ' + error.message);
+                
+                if (error.message.includes('مهلة') || error.message.includes('فشل')) {
+                    if (confirm('⚠️ فشل رفع الملفات. هل تريد إعادة المحاولة؟')) {
+                        quickSaveOperation();
+                    }
+                } else {
+                    alert('❌ خطأ في حفظ العملية: ' + error.message);
+                }
             }
         }
 
@@ -2284,6 +2398,8 @@
         // حفظ مع التحليل
         // ====================================================================
         async function saveOperation() {
+            currentSaveFunction = saveOperation;
+            
             if (!currentUser) {
                 alert('الرجاء تسجيل الدخول');
                 return;
@@ -2300,20 +2416,43 @@
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
-                // تقليل حجم الصور
-                updateProgress('جاري تحسين جودة الصور...', 20);
-                
-                // رفع الملفات بشكل متوازي
+                // رفع الملفات بشكل متوازي مع مهلة زمنية
                 updateProgress('جاري رفع الملفات...', 30);
                 
                 const startTime = Date.now();
                 
-                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
-                    uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
-                    uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
-                    uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
-                    uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
-                ]);
+                // محاولة الرفع مع إعادة المحاولة التلقائية
+                let uploadSuccess = false;
+                let uploadError = null;
+                let plateURL, beforeURL, afterURL, videoURL;
+                
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    try {
+                        updateProgress(`محاولة الرفع ${attempt}/3...`, 30 + (attempt * 10));
+                        
+                        [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
+                            uploadMediaWithTimeout(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`, 10000),
+                            uploadMediaWithTimeout(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`, 15000)
+                        ]);
+                        
+                        uploadSuccess = true;
+                        break;
+                    } catch (error) {
+                        uploadError = error;
+                        console.log(`❌ محاولة ${attempt} فشلت:`, error);
+                        
+                        if (attempt < 3) {
+                            updateProgress(`إعادة المحاولة ${attempt + 1}/3...`, 30);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        }
+                    }
+                }
+                
+                if (!uploadSuccess) {
+                    throw new Error(uploadError || 'فشل رفع الملفات بعد 3 محاولات');
+                }
                 
                 const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
                 
@@ -2346,7 +2485,8 @@
                         after: afterAnalysis.slice(0, 3)
                     },
                     isSuspicious: false,
-                    uploadTime: uploadTime
+                    uploadTime: uploadTime,
+                    retryCount: retryCount
                 };
                 
                 await database.ref('operations').push(operation);
@@ -2356,6 +2496,7 @@
                 setTimeout(() => {
                     hideProgress();
                     alert(`✅ تم حفظ العملية مع التحليل في ${uploadTime} ثانية`);
+                    retryCount = 0;
                 }, 500);
                 
                 // إعادة تعيين
@@ -2366,7 +2507,14 @@
             } catch (error) {
                 console.error('Save error:', error);
                 hideProgress();
-                alert('❌ خطأ في حفظ العملية: ' + error.message);
+                
+                if (error.message.includes('مهلة') || error.message.includes('فشل')) {
+                    if (confirm('⚠️ فشل رفع الملفات. هل تريد إعادة المحاولة؟')) {
+                        saveOperation();
+                    }
+                } else {
+                    alert('❌ خطأ في حفظ العملية: ' + error.message);
+                }
             }
         }
 
