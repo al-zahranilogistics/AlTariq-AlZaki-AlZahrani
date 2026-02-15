@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>الطريق الذكي الزهراني | نظام إدارة الأسطول المتطور</title>
+    <title>الطريق الذكي الزهراني | </title>
     
     <!-- Firebase SDK v10.8.0 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -80,7 +80,7 @@
         }
         
         /* ==================================================================== */
-        /* INSTALL BUTTON - زر تثبيت التطبيق على الجوال                        */
+        /* INSTALL BUTTON - زر تثبيت التطبيق على الجوال - محسن                    */
         /* ==================================================================== */
         .install-fab {
             position: fixed;
@@ -166,102 +166,7 @@
         }
         
         /* ==================================================================== */
-        /* PROGRESS BAR - شريط التقدم لحفظ العملية                            */
-        /* ==================================================================== */
-        .progress-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .progress-overlay.active {
-            display: flex;
-        }
-        
-        .progress-card {
-            background: white;
-            border-radius: 48px;
-            padding: 40px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: var(--shadow-glass), 0 0 50px rgba(56, 189, 248, 0.5);
-            animation: scaleIn 0.3s ease;
-        }
-        
-        @keyframes scaleIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        
-        .progress-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        
-        .progress-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary-deep);
-            margin-bottom: 10px;
-        }
-        
-        .progress-step {
-            color: var(--gray-600);
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        
-        .progress-bar-container {
-            width: 100%;
-            height: 10px;
-            background: var(--gray-200);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-        
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-electric), var(--success-emerald));
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .progress-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: var(--gray-600);
-            font-size: 14px;
-        }
-        
-        .progress-status i {
-            color: var(--success-emerald);
-        }
-        
-        /* ==================================================================== */
-        /* PWA INSTALL BANNER                                                  */
+        /* PWA INSTALL BANNER - محسن للتثبيت على سطح المكتب                      */
         /* ==================================================================== */
         .install-banner {
             position: fixed;
@@ -366,6 +271,126 @@
         .close-install:hover {
             background: rgba(255,255,255,0.2);
             transform: rotate(90deg) scale(1.1);
+        }
+        
+        /* ==================================================================== */
+        /* PROGRESS BAR - شريط التقدم المحسن والسريع                           */
+        /* ==================================================================== */
+        .progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .progress-overlay.active {
+            display: flex;
+        }
+        
+        .progress-card {
+            background: white;
+            border-radius: 48px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-glass), 0 0 50px rgba(56, 189, 248, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .progress-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        .progress-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-deep);
+            margin-bottom: 10px;
+        }
+        
+        .progress-step {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-electric), var(--success-emerald));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+        
+        .progress-status i {
+            color: var(--success-emerald);
+        }
+        
+        /* ==================================================================== */
+        /* QUICK SAVE - حفظ سريع بدون تحليل                                   */
+        /* ==================================================================== */
+        .quick-save-btn {
+            background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .quick-save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
         }
         
         /* ==================================================================== */
@@ -1203,7 +1228,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PWA INSTALL BANNER                         -->
+    <!-- PWA INSTALL BANNER - محسن للتثبيت          -->
     <!-- ========================================== -->
     <div id="installBanner" class="install-banner">
         <div class="install-banner-content">
@@ -1226,7 +1251,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PROGRESS OVERLAY - شريط التقدم            -->
+    <!-- PROGRESS OVERLAY - شريط التقدم المحسن      -->
     <!-- ========================================== -->
     <div id="progressOverlay" class="progress-overlay">
         <div class="progress-card">
@@ -1492,7 +1517,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: DELEGATE REFUEL                  -->
+        <!-- PAGE: DELEGATE REFUEL - مع حفظ سريع     -->
         <!-- ====================================== -->
         <div id="pageDelegateRefuel" class="page">
             <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
@@ -1557,8 +1582,13 @@
                         </div>
                     </div>
                     
+                    <!-- زر الحفظ السريع -->
+                    <button id="quickSaveBtn" class="quick-save-btn" style="margin-bottom: 10px;">
+                        <i class="fas fa-bolt"></i> حفظ سريع (بدون تحليل)
+                    </button>
+                    
                     <button id="saveRefuelOperationBtn" class="btn-primary" style="margin-bottom: 15px;">
-                        <i class="fas fa-save"></i> <span data-translate="saveOperation">حفظ العملية</span>
+                        <i class="fas fa-save"></i> حفظ مع التحليل
                     </button>
                     
                     <button id="delegateLogoutBtn" class="btn-danger" style="width: 100%; padding: 16px; border-radius: 50px; border: none; cursor: pointer;">
@@ -1569,7 +1599,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: ADMIN DASHBOARD - مع عرض البيانات -->
+        <!-- PAGE: ADMIN DASHBOARD                  -->
         <!-- ====================================== -->
         <div id="pageAdminDashboard" class="page">
             <div class="admin-container">
@@ -1708,10 +1738,10 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- Manifest JSON (يتم إنشاؤه تلقائياً)        -->
+    <!-- Manifest JSON                              -->
     <!-- ========================================== -->
     <script>
-        // إنشاء manifest.json تلقائياً
+        // إنشاء manifest.json للتثبيت على سطح المكتب
         const manifest = {
             name: "الطريق الذكي الزهراني",
             short_name: "الطريق الذكي",
@@ -1720,7 +1750,8 @@
             display: "standalone",
             background_color: "#0a1a2f",
             theme_color: "#0a1a2f",
-            orientation: "portrait",
+            orientation: "any",
+            scope: "/",
             icons: [
                 {
                     src: "https://via.placeholder.com/192x192/0a1a2f/38bdf8?text=AZ",
@@ -1766,28 +1797,42 @@
         const storage = firebase.storage();
 
         // ====================================================================
-        // PWA INSTALL HANDLER
+        // PWA INSTALL HANDLER - محسن للتثبيت على سطح المكتب
         // ====================================================================
         let deferredPrompt = null;
         
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            console.log('✅ يمكن تثبيت التطبيق');
+            
+            // إظهار أزرار التثبيت
+            document.getElementById('installFab').style.display = 'flex';
+            document.getElementById('installBanner').style.display = 'flex';
         });
 
         async function installApp() {
             if (!deferredPrompt) {
+                // إذا لم يكن هناك حدث تثبيت، نظهر تعليمات يدوية
                 alert(currentLanguage === 'ar' ? 
-                    'يمكنك تثبيت التطبيق من قائمة المتصفح' : 
-                    'You can install the app from the browser menu');
+                    'يمكنك تثبيت التطبيق يدوياً:\n' +
+                    '1. اضغط على قائمة المتصفح (ثلاث نقاط)\n' +
+                    '2. اختر "تثبيت التطبيق" أو "إضافة للشاشة الرئيسية"' : 
+                    'You can install the app manually:\n' +
+                    '1. Tap the browser menu (three dots)\n' +
+                    '2. Choose "Install App" or "Add to Home Screen"');
                 return;
             }
             
+            // إظهار نافذة التثبيت
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             
             if (outcome === 'accepted') {
                 console.log('✅ تم تثبيت التطبيق');
+                // إخفاء أزرار التثبيت بعد التثبيت
+                document.getElementById('installFab').style.display = 'none';
+                document.getElementById('installBanner').style.display = 'none';
             }
             
             deferredPrompt = null;
@@ -1795,14 +1840,12 @@
 
         // التحقق مما إذا كان التطبيق مثبتاً
         if (window.matchMedia('(display-mode: standalone)').matches) {
-            const installFab = document.getElementById('installFab');
-            const installBanner = document.getElementById('installBanner');
-            if (installFab) installFab.style.display = 'none';
-            if (installBanner) installBanner.style.display = 'none';
+            document.getElementById('installFab').style.display = 'none';
+            document.getElementById('installBanner').style.display = 'none';
         }
 
         // ====================================================================
-        // PROGRESS FUNCTIONS
+        // PROGRESS FUNCTIONS - محسنة للسرعة
         // ====================================================================
         function showProgress(step, percent) {
             const overlay = document.getElementById('progressOverlay');
@@ -2142,7 +2185,77 @@
         }
 
         // ====================================================================
-        // حفظ العملية - مع شريط التقدم
+        // حفظ سريع - بدون تحليل
+        // ====================================================================
+        async function quickSaveOperation() {
+            if (!currentUser) {
+                alert('الرجاء تسجيل الدخول');
+                return;
+            }
+            
+            if (!capturedPlateImage || !capturedBeforeImage || !capturedAfterImage || !capturedVideoBlob) {
+                alert('الرجاء إكمال جميع الصور والفيديو المطلوبة');
+                return;
+            }
+            
+            try {
+                showProgress('جاري الحفظ السريع...', 10);
+                
+                const operationId = Date.now().toString();
+                const userId = currentUser.uid;
+                
+                // رفع الملفات بشكل متوازي للسرعة
+                updateProgress('جاري رفع الملفات...', 30);
+                
+                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
+                    uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
+                    uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
+                    uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
+                    uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
+                ]);
+                
+                updateProgress('جاري حفظ البيانات...', 80);
+                
+                const operation = {
+                    delegateId: userId,
+                    delegateName: currentUserData?.username || 'مندوب',
+                    project: currentUserData?.project || 'غير محدد',
+                    region: currentUserData?.region || 'غير محدد',
+                    fuelType: currentUserData?.fuelType || 'ديزل',
+                    timestamp: new Date().toISOString(),
+                    media: {
+                        plate: plateURL,
+                        before: beforeURL,
+                        after: afterURL,
+                        video: videoURL
+                    },
+                    videoDuration: 30,
+                    isSuspicious: false,
+                    quickSave: true
+                };
+                
+                await database.ref('operations').push(operation);
+                
+                updateProgress('تم الحفظ بنجاح!', 100);
+                setTimeout(() => {
+                    alert('✅ تم حفظ العملية بنجاح');
+                    hideProgress();
+                }, 500);
+                
+                // إعادة تعيين
+                capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
+                capturedVideoBlob = null;
+                document.getElementById('mediaThumbnails').innerHTML = '';
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                hideProgress();
+                alert('❌ خطأ في حفظ العملية: ' + error.message);
+            }
+        }
+
+        // ====================================================================
+        // حفظ مع التحليل
         // ====================================================================
         async function saveOperation() {
             if (!currentUser) {
@@ -2161,23 +2274,25 @@
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
-                updateProgress('جاري رفع صورة اللوحة...', 25);
-                const plateURL = await uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`);
+                // رفع الملفات بشكل متوازي
+                updateProgress('جاري رفع الملفات...', 30);
                 
-                updateProgress('جاري رفع صورة العداد قبل...', 40);
-                const beforeURL = await uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`);
+                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
+                    uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
+                    uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
+                    uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
+                    uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
+                ]);
                 
-                updateProgress('جاري رفع صورة العداد بعد...', 55);
-                const afterURL = await uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`);
+                updateProgress('جاري تحليل الصور...', 60);
                 
-                updateProgress('جاري رفع الفيديو...', 70);
-                const videoURL = await uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`);
+                // تحليل الصور
+                const [beforeAnalysis, afterAnalysis] = await Promise.all([
+                    analyzeImage(capturedBeforeImage.element).catch(() => []),
+                    analyzeImage(capturedAfterImage.element).catch(() => [])
+                ]);
                 
-                updateProgress('جاري تحليل الصور بالذكاء الاصطناعي...', 85);
-                const beforeAnalysis = await analyzeImage(capturedBeforeImage.element).catch(() => []);
-                const afterAnalysis = await analyzeImage(capturedAfterImage.element).catch(() => []);
-                
-                updateProgress('جاري حفظ البيانات...', 95);
+                updateProgress('جاري حفظ البيانات...', 85);
                 
                 const operation = {
                     delegateId: userId,
@@ -2204,10 +2319,11 @@
                 
                 updateProgress('تم الحفظ بنجاح!', 100);
                 setTimeout(() => {
-                    alert('✅ تم حفظ العملية بنجاح');
+                    alert('✅ تم حفظ العملية مع التحليل');
                     hideProgress();
                 }, 500);
                 
+                // إعادة تعيين
                 capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
                 capturedVideoBlob = null;
                 document.getElementById('mediaThumbnails').innerHTML = '';
@@ -2253,7 +2369,7 @@
         }
 
         // ====================================================================
-        // ADMIN DASHBOARD - تحميل البيانات الحقيقية
+        // ADMIN DASHBOARD
         // ====================================================================
         async function loadAdminDashboard() {
             try {
@@ -2271,7 +2387,6 @@
                     });
                 }
                 
-                // تحديث الإحصائيات
                 document.getElementById('totalDelegatesCount').innerText = delegates.length;
                 document.getElementById('pendingDelegatesCount').innerText = pending;
                 document.getElementById('approvedDelegatesCount').innerText = approved;
@@ -2636,18 +2751,6 @@
                 testRef.on('value', (snap) => {
                     if (snap.val() === true) {
                         console.log('✅ متصل بقاعدة البيانات');
-                        
-                        // إنشاء بيانات افتراضية للعرض
-                        const setupRef = database.ref('_setup');
-                        setupRef.set({
-                            timestamp: new Date().toISOString(),
-                            status: 'initialized'
-                        }).then(() => {
-                            console.log('✅ تم إنشاء بيانات الإعداد');
-                            setupRef.remove();
-                        }).catch((error) => {
-                            console.error('❌ خطأ في الإعداد:', error);
-                        });
                     }
                 });
             } catch (error) {
@@ -2656,16 +2759,14 @@
         }
 
         // ====================================================================
-        // CREATE SAMPLE DATA - إنشاء بيانات افتراضية للعرض
+        // CREATE SAMPLE DATA
         // ====================================================================
         async function createSampleData() {
             try {
-                // التحقق من وجود مندوبين
                 const delegatesSnap = await database.ref('delegate_requests').once('value');
                 if (!delegatesSnap.exists()) {
                     console.log('جاري إنشاء بيانات افتراضية للمندوبين...');
                     
-                    // إنشاء مندوبين تجريبيين
                     const sampleDelegates = [
                         { username: 'أحمد محمد', email: 'ahmed@example.com', project: 'المراعي', region: 'الرياض', fuelType: 'ديزل', status: 'approved' },
                         { username: 'خالد عبدالله', email: 'khalid@example.com', project: 'ناقل', region: 'جدة', fuelType: '91', status: 'approved' },
@@ -2682,7 +2783,6 @@
                     console.log('✅ تم إنشاء 5 مندوبين تجريبيين');
                 }
                 
-                // التحقق من وجود عمليات
                 const opsSnap = await database.ref('operations').once('value');
                 if (!opsSnap.exists()) {
                     console.log('جاري إنشاء عملية تجريبية...');
@@ -2708,7 +2808,6 @@
                     console.log('✅ تم إنشاء عملية تجريبية واحدة');
                 }
                 
-                // تحديث الإحصائيات
                 await loadAdminDashboard();
                 
             } catch (error) {
@@ -2767,6 +2866,9 @@
         document.getElementById('captureAfterBtn').addEventListener('click', () => captureImage('after'));
         document.getElementById('startVideoBtn').addEventListener('click', startVideoRecording);
         document.getElementById('stopVideoBtn').addEventListener('click', stopVideoRecording);
+        
+        // أزرار الحفظ
+        document.getElementById('quickSaveBtn').addEventListener('click', quickSaveOperation);
         document.getElementById('saveRefuelOperationBtn').addEventListener('click', saveOperation);
         
         document.getElementById('delegateLogoutBtn').addEventListener('click', async () => { await auth.signOut(); showPage('DelegateLogin'); });
@@ -2776,7 +2878,7 @@
         document.getElementById('installFab').addEventListener('click', installApp);
         document.getElementById('installAppBtn').addEventListener('click', installApp);
         document.getElementById('closeInstallBanner').addEventListener('click', () => {
-            document.getElementById('installBanner').classList.add('hidden');
+            document.getElementById('installBanner').style.display = 'none';
         });
         
         // Tabs
