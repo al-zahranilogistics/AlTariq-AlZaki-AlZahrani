@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>الطريق الذكي الزهراني | نظام إدارة الأسطول المتطور</title>
+    
+    <!-- Firebase SDK v10.8.0 -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- TensorFlow.js للذكاء الاصطناعي -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Leaflet للخرائط -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="الطريق الذكي">
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/192x192/0a1a2f/38bdf8?text=AZ">
+    <meta name="theme-color" content="#0a1a2f">
+    
+    <style>
+        /* ==================================================================== */
+        /* FANTASY PROFESSIONAL DESIGN – الطريق الذكي الزهراني                 */
+        /* ==================================================================== */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-deep: #0a1a2f;
+            --primary-night: #0e2a47;
+            --primary-royal: #1a3e60;
+            --primary-ocean: #2a5f7a;
+            --accent-glow: #3fa3d6;
+            --accent-electric: #38bdf8;
+            --success-emerald: #10b981;
+            --warning-amber: #f59e0b;
+            --danger-coral: #ef4444;
+            --danger-deep: #dc2626;
+            --info-sky: #0ea5e9;
+            --white-pure: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            --shadow-glass: 0 8px 32px 0 rgba(0,0,0,0.36);
+            --shadow-neon: 0 0 20px rgba(56, 189, 248, 0.5);
+            --border-radius-xl: 1.5rem;
+            --border-radius-lg: 1rem;
+            --border-radius-md: 0.75rem;
+            --border-radius-full: 9999px;
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: radial-gradient(circle at 10% 20%, var(--primary-deep), #051220);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* ==================================================================== */
+        /* INSTALL BUTTON - زر تثبيت التطبيق على الجوال                         */
+        /* ==================================================================== */
+        .install-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99999;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5), 0 0 0 2px rgba(255,255,255,0.2);
+            transition: var(--transition-smooth);
+            border: 2px solid rgba(255,255,255,0.3);
+            animation: pulse-install 2s infinite;
+        }
+        
+        .install-fab:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 15px 40px rgba(56, 189, 248, 0.8);
+        }
+        
+        .install-fab i {
+            font-size: 32px;
+            color: white;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+        
+        .install-fab .badge {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: var(--danger-coral);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse-badge 1.5s infinite;
+        }
+        
+        @keyframes pulse-install {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .install-tooltip {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            background: rgba(10, 26, 47, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 12px 28px;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glass);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition-smooth);
+        }
+        
+        .install-fab:hover .install-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* ==================================================================== */
+        /* PWA INSTALL BANNER                                                  */
+        /* ==================================================================== */
+        .install-banner {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(145deg, var(--primary-royal), var(--primary-deep));
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--accent-electric);
+            border-radius: 60px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            box-shadow: var(--shadow-glass), 0 0 30px rgba(56, 189, 248, 0.3);
+            z-index: 999999;
+            animation: slideUp 0.5s ease;
+            max-width: 600px;
+            margin: 0 auto;
+            transform-origin: center;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100px) scale(0.9); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        .install-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .install-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+        }
+        
+        .install-text h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        
+        .install-text p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .install-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .install-btn {
+            background: var(--accent-electric);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+        }
+        
+        .install-btn:hover {
+            background: var(--accent-glow);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.6);
+        }
+        
+        .install-btn i {
+            font-size: 18px;
+        }
+        
+        .close-install {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .close-install:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        /* ==================================================================== */
+        /* HERO VIDEO SECTION                                                  */
+        /* ==================================================================== */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+            border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+            margin-bottom: 30px;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.8) 0%, rgba(5, 18, 32, 0.95) 100%);
+            z-index: 2;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .hero-logo {
+            margin-bottom: 30px;
+            animation: floatHero 6s infinite ease-in-out;
+        }
+        
+        @keyframes floatHero {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.7);
+        }
+        
+        .hero-title span {
+            color: var(--accent-electric);
+            position: relative;
+        }
+        
+        .hero-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-electric), transparent);
+            border-radius: 50px;
+        }
+        
+        .hero-btn {
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(145deg, var(--accent-electric), var(--accent-glow));
+            color: white;
+            box-shadow: 0 0 30px rgba(56,189,248,0.5);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(56,189,248,0.8);
+        }
+        
+        /* ==================================================================== */
+        /* MEDIA CAPTURE STYLES                                                */
+        /* ==================================================================== */
+        .media-capture-container {
+            margin-bottom: 25px;
+            border: 2px dashed var(--gray-300);
+            border-radius: 24px;
+            padding: 20px;
+            background: rgba(255,255,255,0.8);
+        }
+        
+        .camera-preview {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            background: var(--gray-900);
+            margin-bottom: 15px;
+        }
+        
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .capture-btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            background: var(--primary-royal);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .capture-btn:hover {
+            background: var(--accent-electric);
+            transform: scale(1.05);
+        }
+        
+        .capture-btn.video {
+            background: var(--danger-coral);
+        }
+        
+        .capture-btn.video.active {
+            background: var(--danger-deep);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .media-thumbnails {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .media-thumb {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid var(--accent-electric);
+            position: relative;
+        }
+        
+        .media-thumb.video {
+            border-color: var(--danger-coral);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-900);
+            color: white;
+            font-size: 32px;
+        }
+        
+        /* ==================================================================== */
+        /* LANGUAGE ORB                                                        */
+        /* ==================================================================== */
+        .language-orb {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 99999;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--primary-royal), var(--primary-night));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 0 2px rgba(63, 163, 214, 0.2);
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+        }
+        
+        .language-orb:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 15px 35px rgba(56,189,248,0.4), 0 0 0 4px rgba(56,189,248,0.3);
+        }
+        
+        .language-orb i {
+            font-size: 28px;
+            color: white;
+            text-shadow: 0 0 15px var(--accent-electric);
+        }
+        
+        .language-tooltip {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            background: rgba(10, 26, 47, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 12px 28px;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glass);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition-smooth);
+        }
+        
+        .language-orb:hover .language-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .lang-menu {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            background: rgba(10, 26, 47, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: var(--shadow-glass);
+        }
+        
+        .lang-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        
+        .lang-option.active {
+            background: var(--accent-electric);
+            box-shadow: 0 0 20px var(--accent-electric);
+            border-color: white;
+        }
+        
+        .lang-option:hover {
+            background: var(--primary-ocean);
+            transform: scale(1.1);
+        }
+        
+        /* ==================================================================== */
+        /* OVAL LOGO                                                           */
+        /* ==================================================================== */
+        .oval-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .oval-bg {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--accent-glow), var(--primary-royal));
+            border-radius: 50% / 40% 40% 40% 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .oval-bg::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotateGlow 12s linear infinite;
+        }
+        
+        .oval-icon {
+            position: relative;
+            z-index: 3;
+            color: white;
+            text-shadow: 0 0 30px rgba(56,189,248,0.8);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .oval-logo.small { width: 50px; height: 50px; }
+        .oval-logo.medium { width: 80px; height: 80px; }
+        .oval-logo.large { width: 120px; height: 120px; }
+        .oval-logo.xlarge { width: 160px; height: 160px; }
+        
+        .oval-logo.small .oval-icon { font-size: 28px; }
+        .oval-logo.medium .oval-icon { font-size: 42px; }
+        .oval-logo.large .oval-icon { font-size: 64px; }
+        .oval-logo.xlarge .oval-icon { font-size: 80px; }
+        
+        /* ==================================================================== */
+        /* SPLASH SCREEN                                                       */
+        /* ==================================================================== */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #0a2a44, #04111f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            transition: opacity 0.7s ease;
+        }
+        
+        .splash-content {
+            text-align: center;
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .loader-pro {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: var(--accent-electric);
+            border-top-color: var(--accent-glow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* ==================================================================== */
+        /* PAGES SYSTEM                                                        */
+        /* ==================================================================== */
+        .page { display: none; animation: fadePage 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadePage { from { opacity: 0.3; } to { opacity: 1; } }
+        
+        .hidden { display: none !important; }
+        
+        /* ==================================================================== */
+        /* FORM ELEMENTS                                                       */
+        /* ==================================================================== */
+        .floating-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .floating-input {
+            width: 100%;
+            padding: 18px 20px;
+            padding-right: 55px;
+            border: 2px solid var(--gray-200);
+            border-radius: 18px;
+            font-size: 15px;
+            transition: var(--transition-smooth);
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .floating-input:focus {
+            border-color: var(--accent-electric);
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.2);
+            outline: none;
+        }
+        
+        .floating-label {
+            position: absolute;
+            right: 55px;
+            top: 18px;
+            color: var(--gray-500);
+            transition: 0.2s;
+            pointer-events: none;
+            padding: 0 5px;
+        }
+        
+        .floating-input:focus ~ .floating-label,
+        .floating-input:not(:placeholder-shown) ~ .floating-label {
+            top: -10px;
+            right: 45px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-royal);
+            background: linear-gradient(to right, white, #f0f9ff);
+            padding: 0 8px;
+            border-radius: 20px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 18px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(145deg, var(--primary-royal), var(--primary-night));
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            font-size: 16px;
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(145deg, var(--accent-glow), var(--primary-ocean));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(56,189,248,0.5);
+        }
+        
+        .btn-success {
+            background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(145deg, var(--danger-coral), #b91c1c);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(145deg, var(--warning-amber), #b45309);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 48px;
+            box-shadow: var(--shadow-glass);
+        }
+        
+        /* ==================================================================== */
+        /* ADMIN DASHBOARD STYLES                                              */
+        /* ==================================================================== */
+        .admin-container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .admin-header {
+            background: rgba(10, 26, 47, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px 30px;
+            border-radius: 60px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 28px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glass);
+        }
+        
+        .stat-card i {
+            font-size: 36px;
+            color: var(--primary-royal);
+            margin-bottom: 15px;
+        }
+        
+        .stat-card h4 {
+            color: var(--gray-600);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card h2 {
+            color: var(--gray-900);
+            font-size: 32px;
+            font-weight: 800;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-badge.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-badge.suspicious {
+            background: #ffebe6;
+            color: #b91c1c;
+            border-right: 4px solid #ef4444;
+        }
+        
+        .status-badge.normal {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .delegates-table, .operations-table, .suspicious-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .delegates-table th, .operations-table th, .suspicious-table th {
+            background: var(--gray-100);
+            padding: 16px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .delegates-table td, .operations-table td, .suspicious-table td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .action-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 0 4px;
+            transition: var(--transition-smooth);
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .tab-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        
+        .tab-btn.active {
+            background: var(--accent-electric);
+            color: white;
+        }
+        
+        .ai-badge {
+            background: linear-gradient(145deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .geo-badge {
+            background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        
+        .geo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .media-preview-btn {
+            background: var(--info-sky);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition-smooth);
+        }
+        
+        .media-preview-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .media-preview-btn.video {
+            background: var(--danger-coral);
+        }
+        
+        .media-preview-btn.warning {
+            background: var(--warning-amber);
+        }
+        
+        /* ==================================================================== */
+        /* MODAL STYLES                                                        */
+        /* ==================================================================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 48px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--danger-coral);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 20px;
+        }
+        
+        #mapContainer {
+            height: 400px;
+            width: 100%;
+            border-radius: 24px;
+            margin: 20px 0;
+        }
+        
+        .analysis-details {
+            background: var(--gray-50);
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .analysis-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .analysis-item:last-child {
+            border-bottom: none;
+        }
+        
+        .confidence-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-emerald), var(--accent-electric));
+            border-radius: 4px;
+        }
+        
+        /* ==================================================================== */
+        /* RESPONSIVE                                                          */
+        /* ==================================================================== */
+        @media (max-width: 992px) {
+            .hero-title { font-size: 48px; }
+            .admin-header { flex-direction: column; gap: 15px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .install-banner { flex-direction: column; gap: 15px; text-align: center; }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section { height: 80vh; }
+            .hero-title { font-size: 36px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .delegates-table { display: block; overflow-x: auto; }
+            .tab-container { justify-content: center; }
+            .camera-preview { height: 180px; }
+            #mapContainer { height: 300px; }
+            .install-fab { width: 60px; height: 60px; bottom: 20px; right: 20px; }
+            .install-fab i { font-size: 28px; }
+            .install-banner { padding: 15px 20px; }
+            .install-btn { padding: 10px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================== -->
+    <!-- INSTALL BUTTON - زر تثبيت التطبيق على الجوال -->
+    <!-- ========================================== -->
+    <div id="installFab" class="install-fab hidden">
+        <span class="badge">1</span>
+        <i class="fas fa-download"></i>
+        <span class="install-tooltip" data-translate="installTooltip">تثبيت التطبيق على جهازك</span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PWA INSTALL BANNER                         -->
+    <!-- ========================================== -->
+    <div id="installBanner" class="install-banner hidden">
+        <div class="install-banner-content">
+            <div class="install-icon">
+                <i class="fas fa-road"></i>
+            </div>
+            <div class="install-text">
+                <h4 data-translate="installApp">تثبيت التطبيق</h4>
+                <p data-translate="installDesc">قم بتثبيت نظام الطريق الذكي على جهازك للوصول السريع</p>
+            </div>
+        </div>
+        <div class="install-actions">
+            <button id="installAppBtn" class="install-btn">
+                <i class="fas fa-download"></i> <span data-translate="install">تثبيت</span>
+            </button>
+            <button id="closeInstallBanner" class="close-install">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LANGUAGE SWITCHER                         -->
+    <!-- ========================================== -->
+    <div id="languageOrb" class="language-orb">
+        <i class="fas fa-globe"></i>
+        <span class="language-tooltip" id="currentLangLabel">اللغة: العربية</span>
+    </div>
+    
+    <div id="langSideMenu" class="lang-menu">
+        <div id="langAr" class="lang-option active" data-lang="ar">ع</div>
+        <div id="langEn" class="lang-option" data-lang="en">EN</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL لعرض التفاصيل                       -->
+    <!-- ========================================== -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h2 id="modalTitle" style="margin-bottom: 20px; color: var(--primary-royal);">تفاصيل العملية</h2>
+            
+            <div id="modalLocation">
+                <h3><i class="fas fa-map-marker-alt" style="color: var(--success-emerald);"></i> موقع التعبئة</h3>
+                <div id="mapContainer"></div>
+                <p id="locationCoordinates" style="margin-top: 10px; color: var(--gray-600);"></p>
+            </div>
+            
+            <div id="modalAnalysis" class="analysis-details">
+                <h3><i class="fas fa-robot" style="color: #6366f1;"></i> تحليل الذكاء الاصطناعي</h3>
+                <div id="analysisContent"></div>
+            </div>
+            
+            <div id="modalMedia" style="margin-top: 20px;">
+                <h3><i class="fas fa-images"></i> الوسائط</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;" id="mediaLinks"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SPLASH SCREEN                             -->
+    <!-- ========================================== -->
+    <div id="splash" class="splash-screen">
+        <div class="splash-content">
+            <div class="oval-logo xlarge">
+                <div class="oval-bg">
+                    <i class="fas fa-road oval-icon"></i>
+                </div>
+            </div>
+            <div class="loader-pro"></div>
+            <h1 class="splash-title" style="color: white; font-size: 42px; font-weight: 900; text-shadow: 0 0 20px cyan;" data-translate="splashTitle">الطريق الذكي</h1>
+            <p style="color: rgba(255,255,255,0.9); font-size: 24px; font-weight: 700;" data-translate="splashSubtitle">الزهراني</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN APPLICATION                          -->
+    <!-- ========================================== -->
+    <div id="appMain" class="app hidden">
+        
+        <!-- ====================================== -->
+        <!-- HERO SECTION                          -->
+        <!-- ====================================== -->
+        <section class="hero-section">
+            <video class="hero-video" autoplay muted loop playsinline>
+                <source src="https://res.cloudinary.com/dzukfybwr/video/upload/v1770894287/12_nhxuiu.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+            
+            <div class="hero-content">
+                <div class="hero-logo">
+                    <div class="oval-logo xlarge">
+                        <div class="oval-bg">
+                            <i class="fas fa-road oval-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <h1 class="hero-title" data-aos="fade-up" data-translate="heroTitle">
+                    <span>الطريق الذكي</span> الزهراني
+                </h1>
+                
+                <button id="heroLoginBtn" class="hero-btn" data-aos="fade-up" data-aos-delay="400" data-translate="heroBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    دخول المندوبين
+                </button>
+            </div>
+        </section>
+
+        <!-- ====================================== -->
+        <!-- PAGE: DELEGATE LOGIN                  -->
+        <!-- ====================================== -->
+        <div id="pageDelegateLogin" class="page">
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
+                <div class="glass-card" style="max-width: 480px; width: 100%; padding: 40px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div class="oval-logo large" style="margin: 0 auto 15px;">
+                            <div class="oval-bg">
+                                <i class="fas fa-user-tie oval-icon"></i>
+                            </div>
+                        </div>
+                        <h2 style="color: var(--primary-deep); font-weight: 800;" data-translate="loginTitle">تسجيل الدخول</h2>
+                    </div>
+                    
+                    <form id="delegateLoginForm">
+                        <div class="floating-group">
+                            <input type="text" id="loginUsername" class="floating-input" placeholder=" " required>
+                            <label for="loginUsername" class="floating-label" data-translate="username">اسم المستخدم</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <input type="password" id="loginPassword" class="floating-input" placeholder=" " required>
+                            <label for="loginPassword" class="floating-label" data-translate="password">كلمة المرور</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" style="margin-top: 15px;" data-translate="loginBtn">
+                            دخول
+                        </button>
+                    </form>
+                    
+                    <div style="text-align: center; margin-top: 25px;">
+                        <button id="showSignupBtn" style="background: none; border: none; color: var(--primary-royal); font-weight: 700;" data-translate="newDelegate">
+                            <i class="fas fa-user-plus"></i> مندوب جديد؟ سجل الآن
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 20px; border-top: 1px solid var(--gray-200); padding-top: 20px; text-align: center;">
+                        <span style="color: var(--gray-600); font-weight: 600;">
+                            <i class="fas fa-user-shield"></i> دخول المدير المسؤول
+                        </span>
+                        <span style="margin: 0 10px; color: var(--gray-400);">|</span>
+                        <a href="#" id="backToHeroBtn" style="color: var(--gray-600); font-weight: 600;" data-translate="home">
+                            <i class="fas fa-home"></i> الرئيسية
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================================== -->
+        <!-- PAGE: DELEGATE SIGNUP                  -->
+        <!-- ====================================== -->
+        <div id="pageDelegateSignup" class="page">
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 20px;">
+                <div class="glass-card" style="max-width: 600px; width: 100%; padding: 40px;">
+                    <div style="text-align: center;">
+                        <div class="oval-logo medium" style="margin: 0 auto;">
+                            <div class="oval-bg"><i class="fas fa-user-plus oval-icon"></i></div>
+                        </div>
+                        <h2 style="color: var(--primary-deep);" data-translate="signupTitle">تسجيل جديد</h2>
+                        <p style="color: var(--gray-500);">(البريد الإلكتروني اختياري)</p>
+                    </div>
+                    
+                    <form id="signupForm">
+                        <div class="floating-group">
+                            <input type="text" id="signupUsername" class="floating-input" placeholder=" " required>
+                            <label class="floating-label" data-translate="username">اسم المستخدم</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <input type="password" id="signupPassword" class="floating-input" placeholder=" " minlength="4" required>
+                            <label class="floating-label" data-translate="password">كلمة المرور</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <input type="email" id="signupEmail" class="floating-input" placeholder=" ">
+                            <label class="floating-label" data-translate="email">البريد الإلكتروني (اختياري)</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <select id="signupProject" class="floating-input" style="appearance: none;" required>
+                                <option value="" disabled selected data-translate="selectProject">اختر المشروع</option>
+                                <option value="مناديل">مناديل</option>
+                                <option value="ناقل">ناقل</option>
+                                <option value="كيمارت">كيمارت</option>
+                                <option value="المراعي">المراعي</option>
+                                <option value="ارامكس">ارامكس</option>
+                                <option value="الطريق الذكي">الطريق الذكي</option>
+                                <option value="manual" data-translate="otherProject">➕ مشروع آخر</option>
+                            </select>
+                            <i class="fas fa-building input-icon"></i>
+                        </div>
+                        
+                        <div id="signupManualProjectContainer" class="floating-group hidden">
+                            <input type="text" id="signupManualProject" class="floating-input" placeholder=" ">
+                            <label class="floating-label" data-translate="enterProject">أدخل اسم المشروع</label>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <select id="signupRegion" class="floating-input" required>
+                                <option value="" disabled selected data-translate="selectRegion">اختر المنطقة</option>
+                                <option value="الرياض">الرياض</option>
+                                <option value="مكة">مكة</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="جدة">جدة</option>
+                                <option value="الدمام">الدمام</option>
+                                <option value="تبوك">تبوك</option>
+                                <option value="القصيم">القصيم</option>
+                                <option value="عسير">عسير</option>
+                                <option value="manual" data-translate="otherRegion">➕ منطقة أخرى</option>
+                            </select>
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                        </div>
+                        
+                        <div id="signupManualRegionContainer" class="floating-group hidden">
+                            <input type="text" id="signupManualRegion" class="floating-input" placeholder=" ">
+                            <label class="floating-label" data-translate="enterRegion">أدخل اسم المنطقة</label>
+                        </div>
+                        
+                        <div class="floating-group">
+                            <select id="signupFuelType" class="floating-input" style="appearance: none;" required>
+                                <option value="" disabled selected data-translate="selectFuel">اختر نوع الوقود</option>
+                                <option value="ديزل">⛽ ديزل</option>
+                                <option value="91">⛽ بنزين 91</option>
+                            </select>
+                            <i class="fas fa-oil-can input-icon"></i>
+                        </div>
+                        
+                        <div style="margin: 25px 0;">
+                            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; background: var(--gray-50); padding: 15px; border-radius: var(--border-radius-lg);">
+                                <input type="checkbox" id="agreeTerms" required style="width: 20px; height: 20px;">
+                                <span style="color: var(--gray-700); font-weight: 600;" data-translate="agreeTerms">أوافق على الشروط والأحكام</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" data-translate="signupBtn">
+                            <i class="fas fa-paper-plane"></i> تقديم الطلب
+                        </button>
+                    </form>
+                    
+                    <div style="text-align: center; margin-top: 25px;">
+                        <a href="#" id="backToLoginBtn" style="color: var(--gray-600); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-arrow-right"></i> <span data-translate="backToLogin">العودة لتسجيل الدخول</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================================== -->
+        <!-- PAGE: DELEGATE REFUEL                  -->
+        <!-- ====================================== -->
+        <div id="pageDelegateRefuel" class="page">
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
+                <div class="glass-card" style="max-width: 800px; width: 100%; padding: 40px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div class="oval-logo large" style="margin: 0 auto 15px;">
+                            <div class="oval-bg">
+                                <i class="fas fa-gas-pump oval-icon"></i>
+                            </div>
+                        </div>
+                        <h2 style="color: var(--primary-deep); font-weight: 800;" data-translate="refuelTitle">تعبئة جديدة</h2>
+                        <p id="delegateNameDisplay" style="color: var(--gray-600);">مرحباً، <span id="delegateNameSpan"></span></p>
+                    </div>
+                    
+                    <div style="background: var(--gray-50); border-radius: 24px; padding: 25px; margin-bottom: 25px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <p style="color: var(--gray-500); font-size: 14px;" data-translate="project">المشروع</p>
+                                <p id="delegateProjectSpan" style="font-weight: 700;"></p>
+                            </div>
+                            <div>
+                                <p style="color: var(--gray-500); font-size: 14px;" data-translate="region">المنطقة</p>
+                                <p id="delegateRegionSpan" style="font-weight: 700;"></p>
+                            </div>
+                            <div>
+                                <p style="color: var(--gray-500); font-size: 14px;" data-translate="fuelType">نوع الوقود</p>
+                                <p id="delegateFuelTypeSpan" style="font-weight: 700;"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ========== MEDIA CAPTURE SECTION ========== -->
+                    <div class="media-capture-container">
+                        <h3 style="margin-bottom: 15px; color: var(--primary-royal);">
+                            <i class="fas fa-camera"></i> التوثيق المطلوب
+                        </h3>
+                        
+                        <video id="cameraPreview" class="camera-preview" autoplay playsinline muted></video>
+                        
+                        <div class="camera-controls">
+                            <button id="capturePlateBtn" class="capture-btn">
+                                <i class="fas fa-camera"></i> صورة اللوحة
+                            </button>
+                            <button id="captureBeforeBtn" class="capture-btn">
+                                <i class="fas fa-camera"></i> صورة العداد قبل
+                            </button>
+                            <button id="captureAfterBtn" class="capture-btn">
+                                <i class="fas fa-camera"></i> صورة العداد بعد
+                            </button>
+                            <button id="startVideoBtn" class="capture-btn video">
+                                <i class="fas fa-video"></i> تصوير المضخة
+                            </button>
+                            <button id="stopVideoBtn" class="capture-btn" style="background: var(--gray-600); display: none;">
+                                <i class="fas fa-stop"></i> إيقاف
+                            </button>
+                        </div>
+                        
+                        <div id="mediaThumbnails" class="media-thumbnails"></div>
+                        
+                        <div id="aiAnalysisStatus" class="ai-analysis-badge" style="display: none;">
+                            <i class="fas fa-robot"></i> جاري التحليل...
+                        </div>
+                    </div>
+                    
+                    <button id="saveRefuelOperationBtn" class="btn-primary" style="margin-bottom: 15px;">
+                        <i class="fas fa-save"></i> <span data-translate="saveOperation">حفظ العملية</span>
+                    </button>
+                    
+                    <button id="delegateLogoutBtn" class="btn-danger" style="width: 100%; padding: 16px; border-radius: 50px; border: none; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> <span data-translate="logout">تسجيل خروج</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================================== -->
+        <!-- PAGE: ADMIN DASHBOARD                  -->
+        <!-- ====================================== -->
+        <div id="pageAdminDashboard" class="page">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="oval-logo medium">
+                            <div class="oval-bg">
+                                <i class="fas fa-crown oval-icon"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 style="margin: 0; font-size: 28px; font-weight: 900;" data-translate="adminDashboard">لوحة تحكم المدير</h2>
+                            <p style="margin: 5px 0 0; opacity: 0.9;" data-translate="welcomeAdmin">الطريق الذكي الزهراني</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <span id="adminEmailDisplay" style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px;">
+                            admin@al-zahrani.com
+                        </span>
+                        <button id="adminLogoutBtn" class="btn-primary" style="width: auto; padding: 12px 28px; background: var(--danger-coral);">
+                            <i class="fas fa-sign-out-alt"></i> <span data-translate="logout">خروج</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h4 data-translate="totalDelegates">إجمالي المندوبين</h4>
+                        <h2 id="totalDelegatesCount">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user-clock"></i>
+                        <h4 data-translate="pendingDelegates">مندوبين بانتظار الموافقة</h4>
+                        <h2 id="pendingDelegatesCount">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h4 data-translate="approvedDelegates">مندوبين معتمدين</h4>
+                        <h2 id="approvedDelegatesCount">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gas-pump"></i>
+                        <h4 data-translate="totalOperations">إجمالي العمليات</h4>
+                        <h2 id="totalOperationsCount">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h4 data-translate="suspiciousOperations">عمليات مشبوهة</h4>
+                        <h2 id="suspiciousOperationsCount">0</h2>
+                    </div>
+                </div>
+                
+                <div class="tab-container">
+                    <button id="delegatesTabBtn" class="tab-btn active" data-translate="delegatesTab">إدارة المندوبين</button>
+                    <button id="operationsTabBtn" class="tab-btn" data-translate="operationsTab">جميع العمليات</button>
+                    <button id="suspiciousTabBtn" class="tab-btn" data-translate="suspiciousTab">العمليات المشبوهة</button>
+                </div>
+                
+                <div id="delegatesTab" class="tab-content">
+                    <div style="background: white; border-radius: 28px; padding: 25px;">
+                        <h3 style="margin-bottom: 20px; color: var(--primary-royal);" data-translate="pendingApprovals">طلبات الموافقة على المندوبين</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="delegates-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th data-translate="username">اسم المستخدم</th>
+                                        <th data-translate="email">البريد الإلكتروني</th>
+                                        <th data-translate="project">المشروع</th>
+                                        <th data-translate="region">المنطقة</th>
+                                        <th data-translate="fuelType">نوع الوقود</th>
+                                        <th data-translate="status">الحالة</th>
+                                        <th data-translate="actions">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="delegatesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="operationsTab" class="tab-content hidden">
+                    <div style="background: white; border-radius: 28px; padding: 25px;">
+                        <h3 style="margin-bottom: 20px; color: var(--primary-royal);" data-translate="operationsLog">سجل عمليات التعبئة</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="operations-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>المندوب</th>
+                                        <th>المشروع</th>
+                                        <th>نوع الوقود</th>
+                                        <th>صورة اللوحة</th>
+                                        <th>العداد قبل</th>
+                                        <th>العداد بعد</th>
+                                        <th>فيديو المضخة</th>
+                                        <th>الموقع</th>
+                                        <th>التفاصيل</th>
+                                        <th>التاريخ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="operationsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="suspiciousTab" class="tab-content hidden">
+                    <div style="background: white; border-radius: 28px; padding: 25px;">
+                        <h3 style="margin-bottom: 20px; color: var(--danger-coral);">
+                            <i class="fas fa-exclamation-triangle"></i> العمليات المشبوهة
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="suspicious-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>المندوب</th>
+                                        <th>المشروع</th>
+                                        <th>نوع الوقود</th>
+                                        <th>الوسائط</th>
+                                        <th>الموقع</th>
+                                        <th>التحليل</th>
+                                        <th>التفاصيل</th>
+                                        <th>نسبة الثقة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="suspiciousTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Manifest JSON (يتم إنشاؤه تلقائياً)        -->
+    <!-- ========================================== -->
+    <script>
+        // إنشاء manifest.json تلقائياً
+        const manifest = {
+            name: "الطريق الذكي الزهراني",
+            short_name: "الطريق الذكي",
+            description: "نظام إدارة الأسطول المتطور مع الذكاء الاصطناعي",
+            start_url: "/",
+            display: "standalone",
+            background_color: "#0a1a2f",
+            theme_color: "#0a1a2f",
+            orientation: "portrait",
+            icons: [
+                {
+                    src: "https://via.placeholder.com/192x192/0a1a2f/38bdf8?text=AZ",
+                    sizes: "192x192",
+                    type: "image/png",
+                    purpose: "any maskable"
+                },
+                {
+                    src: "https://via.placeholder.com/512x512/0a1a2f/38bdf8?text=AZ",
+                    sizes: "512x512",
+                    type: "image/png",
+                    purpose: "any maskable"
+                }
+            ]
+        };
+        
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = manifestURL;
+        document.head.appendChild(manifestLink);
+    </script>
+
+    <script>
+        // ====================================================================
+        // FIREBASE CONFIGURATION
+        // ====================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeuyUhbnsE4LVrE6RKYe_vbhir2WLnQ1A",
+            authDomain: "al-zahrani-is-fuel.firebaseapp.com",
+            databaseURL: "https://al-zahrani-is-fuel-default-rtdb.firebaseio.com",
+            projectId: "al-zahrani-is-fuel",
+            storageBucket: "al-zahrani-is-fuel.appspot.com",
+            messagingSenderId: "379225678294",
+            appId: "1:379225678294:web:4fda8847260c4a5d230477"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        // ====================================================================
+        // PWA INSTALL HANDLER - مع زر التثبيت الجديد
+        // ====================================================================
+        let deferredPrompt = null;
+        let isInstallable = false;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            isInstallable = true;
+            
+            // إظهار زر التثبيت العائم
+            const installFab = document.getElementById('installFab');
+            const installBanner = document.getElementById('installBanner');
+            
+            if (installFab) {
+                installFab.classList.remove('hidden');
+            }
+            
+            if (installBanner) {
+                installBanner.classList.remove('hidden');
+            }
+        });
+
+        // إخفاء زر التثبيت إذا تم التثبيت بالفعل
+        window.addEventListener('appinstalled', () => {
+            const installFab = document.getElementById('installFab');
+            const installBanner = document.getElementById('installBanner');
+            
+            if (installFab) {
+                installFab.classList.add('hidden');
+            }
+            
+            if (installBanner) {
+                installBanner.classList.add('hidden');
+            }
+            
+            deferredPrompt = null;
+            isInstallable = false;
+        });
+
+        // التحقق مما إذا كان التطبيق مثبتاً بالفعل
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            const installFab = document.getElementById('installFab');
+            const installBanner = document.getElementById('installBanner');
+            
+            if (installFab) installFab.classList.add('hidden');
+            if (installBanner) installBanner.classList.add('hidden');
+        }
+
+        // ====================================================================
+        // دالة تثبيت التطبيق
+        // ====================================================================
+        async function installApp() {
+            if (!deferredPrompt) {
+                alert(currentLanguage === 'ar' ? 
+                    'يمكنك تثبيت التطبيق من قائمة المتصفح' : 
+                    'You can install the app from the browser menu');
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('✅ تم تثبيت التطبيق');
+                const installFab = document.getElementById('installFab');
+                const installBanner = document.getElementById('installBanner');
+                
+                if (installFab) installFab.classList.add('hidden');
+                if (installBanner) installBanner.classList.add('hidden');
+            }
+            
+            deferredPrompt = null;
+        }
+
+        // ====================================================================
+        // TRANSLATIONS - إضافة ترجمة جديدة لزر التثبيت
+        // ====================================================================
+        const translations = {
+            ar: {
+                splashTitle: 'الطريق الذكي',
+                splashSubtitle: 'الزهراني',
+                heroTitle: '<span>الطريق الذكي</span> الزهراني',
+                heroBtn: 'دخول المندوبين',
+                loginTitle: 'تسجيل الدخول',
+                username: 'اسم المستخدم',
+                password: 'كلمة المرور',
+                email: 'البريد الإلكتروني (اختياري)',
+                loginBtn: 'دخول',
+                newDelegate: 'مندوب جديد؟ سجل الآن',
+                home: 'الرئيسية',
+                signupTitle: 'تسجيل جديد',
+                fullName: 'الاسم الكامل',
+                agreeTerms: 'أوافق على الشروط والأحكام',
+                signupBtn: 'تقديم الطلب',
+                backToLogin: '← العودة لتسجيل الدخول',
+                currentLang: 'اللغة: العربية',
+                adminDashboard: 'لوحة تحكم المدير',
+                welcomeAdmin: 'الطريق الذكي الزهراني',
+                logout: 'خروج',
+                totalDelegates: 'إجمالي المندوبين',
+                pendingDelegates: 'مندوبين بانتظار الموافقة',
+                approvedDelegates: 'مندوبين معتمدين',
+                totalOperations: 'إجمالي العمليات',
+                suspiciousOperations: 'عمليات مشبوهة',
+                delegatesTab: 'إدارة المندوبين',
+                operationsTab: 'جميع العمليات',
+                suspiciousTab: 'العمليات المشبوهة',
+                pendingApprovals: 'طلبات الموافقة على المندوبين',
+                name: 'الاسم',
+                project: 'المشروع',
+                region: 'المنطقة',
+                fuelType: 'نوع الوقود',
+                status: 'الحالة',
+                actions: 'إجراءات',
+                approve: 'موافقة',
+                reject: 'رفض',
+                noDelegates: 'لا يوجد مندوبين بانتظار الموافقة',
+                operationsLog: 'سجل عمليات التعبئة',
+                noOperations: 'لا توجد عمليات تعبئة',
+                pending: 'قيد الانتظار',
+                approved: 'معتمد',
+                rejected: 'مرفوض',
+                suspicious: 'مشبوه',
+                normal: 'طبيعي',
+                refuelTitle: 'تعبئة جديدة',
+                saveOperation: 'حفظ العملية',
+                installApp: 'تثبيت التطبيق',
+                installDesc: 'قم بتثبيت نظام الطريق الذكي على جهازك للوصول السريع',
+                install: 'تثبيت',
+                installTooltip: 'تثبيت التطبيق على جهازك',
+                selectProject: 'اختر المشروع',
+                otherProject: '➕ مشروع آخر',
+                enterProject: 'أدخل اسم المشروع',
+                selectRegion: 'اختر المنطقة',
+                otherRegion: '➕ منطقة أخرى',
+                enterRegion: 'أدخل اسم المنطقة',
+                selectFuel: 'اختر نوع الوقود'
+            },
+            en: {
+                splashTitle: 'Al Tariq Al Zaki',
+                splashSubtitle: 'Al Zahrani',
+                heroTitle: '<span>Al Tariq Al Zaki</span> Al Zahrani',
+                heroBtn: 'Delegate Login',
+                loginTitle: 'Login',
+                username: 'Username',
+                password: 'Password',
+                email: 'Email (optional)',
+                loginBtn: 'Login',
+                newDelegate: 'New Delegate? Register Now',
+                home: 'Home',
+                signupTitle: 'Sign Up',
+                fullName: 'Full Name',
+                agreeTerms: 'I agree to the terms',
+                signupBtn: 'Submit Request',
+                backToLogin: '← Back to Login',
+                currentLang: 'Language: English',
+                adminDashboard: 'Admin Dashboard',
+                welcomeAdmin: 'Al Tariq Al Zaki Al Zahrani',
+                logout: 'Logout',
+                totalDelegates: 'Total Delegates',
+                pendingDelegates: 'Pending Approval',
+                approvedDelegates: 'Approved Delegates',
+                totalOperations: 'Total Operations',
+                suspiciousOperations: 'Suspicious Operations',
+                delegatesTab: 'Delegates Management',
+                operationsTab: 'All Operations',
+                suspiciousTab: 'Suspicious Operations',
+                pendingApprovals: 'Delegate Approval Requests',
+                name: 'Name',
+                project: 'Project',
+                region: 'Region',
+                fuelType: 'Fuel Type',
+                status: 'Status',
+                actions: 'Actions',
+                approve: 'Approve',
+                reject: 'Reject',
+                noDelegates: 'No delegates pending approval',
+                operationsLog: 'Refueling Operations Log',
+                noOperations: 'No refueling operations',
+                pending: 'Pending',
+                approved: 'Approved',
+                rejected: 'Rejected',
+                suspicious: 'Suspicious',
+                normal: 'Normal',
+                refuelTitle: 'New Refueling',
+                saveOperation: 'Save Operation',
+                installApp: 'Install App',
+                installDesc: 'Install Al Tariq Al Zaki system on your device for quick access',
+                install: 'Install',
+                installTooltip: 'Install app on your device',
+                selectProject: 'Select Project',
+                otherProject: '➕ Other Project',
+                enterProject: 'Enter project name',
+                selectRegion: 'Select Region',
+                otherRegion: '➕ Other Region',
+                enterRegion: 'Enter region name',
+                selectFuel: 'Select Fuel Type'
+            }
+        };
+
+        // ====================================================================
+        // GLOBAL VARIABLES
+        // ====================================================================
+        let currentLanguage = localStorage.getItem('preferredLang') || 'ar';
+        let currentUser = null;
+        let currentUserData = null;
+        
+        // Media Capture
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecording = false;
+        
+        // Captured Media
+        let capturedPlateImage = null;
+        let capturedBeforeImage = null;
+        let capturedAfterImage = null;
+        let capturedVideoBlob = null;
+        
+        // AI Model
+        let aiModel = null;
+        
+        // Map
+        let map = null;
+        let currentMarker = null;
+
+        // ====================================================================
+        // LANGUAGE
+        // ====================================================================
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.dataset.translate;
+                if (translations[lang] && translations[lang][key]) {
+                    if (key === 'heroTitle') el.innerHTML = translations[lang][key];
+                    else el.innerText = translations[lang][key];
+                }
+            });
+            document.getElementById('currentLangLabel').innerText = translations[lang].currentLang;
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.lang = lang;
+            document.getElementById('langAr').classList.toggle('active', lang === 'ar');
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+            localStorage.setItem('preferredLang', lang);
+        }
+
+        // ====================================================================
+        // AI MODEL
+        // ====================================================================
+        async function loadAIModel() {
+            try {
+                aiModel = await mobilenet.load();
+                console.log('✅ AI Model loaded');
+            } catch (error) {
+                console.error('Error loading AI model:', error);
+            }
+        }
+
+        // ====================================================================
+        // تحليل الصورة
+        // ====================================================================
+        async function analyzeImage(imageElement) {
+            if (!aiModel) await loadAIModel();
+            try {
+                const predictions = await aiModel.classify(imageElement);
+                return predictions;
+            } catch (error) {
+                console.error('Analysis error:', error);
+                return [];
+            }
+        }
+
+        // ====================================================================
+        // CAMERA
+        // ====================================================================
+        async function startCamera() {
+            try {
+                if (mediaStream) stopCamera();
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: 1280, height: 720 },
+                    audio: false
+                });
+                document.getElementById('cameraPreview').srcObject = mediaStream;
+            } catch (error) {
+                console.error('Camera error:', error);
+            }
+        }
+
+        function stopCamera() {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        }
+
+        // ====================================================================
+        // التقاط الصور
+        // ====================================================================
+        async function captureImage(type) {
+            const video = document.getElementById('cameraPreview');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+            const url = URL.createObjectURL(blob);
+            
+            const thumb = document.createElement('img');
+            thumb.src = url;
+            thumb.className = 'media-thumb';
+            
+            if (type === 'plate') {
+                capturedPlateImage = { blob, url, element: thumb };
+            } else if (type === 'before') {
+                capturedBeforeImage = { blob, url, element: thumb };
+            } else if (type === 'after') {
+                capturedAfterImage = { blob, url, element: thumb };
+            }
+            
+            document.getElementById('mediaThumbnails').appendChild(thumb);
+            
+            document.getElementById('aiAnalysisStatus').style.display = 'flex';
+            document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-check-circle"></i> تم الالتقاط';
+            setTimeout(() => {
+                document.getElementById('aiAnalysisStatus').style.display = 'none';
+            }, 1000);
+        }
+
+        // ====================================================================
+        // تسجيل الفيديو
+        // ====================================================================
+        function startVideoRecording() {
+            if (!mediaStream) {
+                alert('الكاميرا غير مفعلة');
+                return;
+            }
+            
+            isRecording = true;
+            recordedChunks = [];
+            
+            mediaRecorder = new MediaRecorder(mediaStream, {
+                mimeType: 'video/webm;codecs=vp9',
+                audioBitsPerSecond: 0
+            });
+            
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) recordedChunks.push(e.data);
+            };
+            
+            mediaRecorder.onstop = () => {
+                isRecording = false;
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                capturedVideoBlob = blob;
+                
+                const thumb = document.createElement('div');
+                thumb.className = 'video-thumb media-thumb';
+                thumb.innerHTML = '<i class="fas fa-video"></i>';
+                document.getElementById('mediaThumbnails').appendChild(thumb);
+                
+                document.getElementById('startVideoBtn').style.display = 'inline-flex';
+                document.getElementById('stopVideoBtn').style.display = 'none';
+                document.getElementById('stopVideoBtn').classList.remove('active');
+            };
+            
+            mediaRecorder.start();
+            
+            document.getElementById('startVideoBtn').style.display = 'none';
+            document.getElementById('stopVideoBtn').style.display = 'inline-flex';
+            document.getElementById('stopVideoBtn').classList.add('active');
+        }
+
+        function stopVideoRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        }
+
+        // ====================================================================
+        // حفظ العملية
+        // ====================================================================
+        async function saveOperation() {
+            if (!currentUser) {
+                alert('الرجاء تسجيل الدخول');
+                return;
+            }
+            
+            if (!capturedPlateImage || !capturedBeforeImage || !capturedAfterImage || !capturedVideoBlob) {
+                alert('الرجاء إكمال جميع الصور والفيديو المطلوبة');
+                return;
+            }
+            
+            try {
+                document.getElementById('aiAnalysisStatus').style.display = 'flex';
+                document.getElementById('aiAnalysisStatus').innerHTML = '<i class="fas fa-upload"></i> جاري حفظ العملية...';
+                
+                const operationId = Date.now().toString();
+                const userId = currentUser.uid;
+                
+                const plateURL = await uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`);
+                const beforeURL = await uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`);
+                const afterURL = await uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`);
+                const videoURL = await uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`);
+                
+                // تحليل الصور
+                const beforeAnalysis = await analyzeImage(capturedBeforeImage.element).catch(() => []);
+                const afterAnalysis = await analyzeImage(capturedAfterImage.element).catch(() => []);
+                
+                const operation = {
+                    delegateId: userId,
+                    delegateName: currentUserData?.username || 'مندوب',
+                    project: currentUserData?.project || 'غير محدد',
+                    region: currentUserData?.region || 'غير محدد',
+                    fuelType: currentUserData?.fuelType || 'ديزل',
+                    timestamp: new Date().toISOString(),
+                    media: {
+                        plate: plateURL,
+                        before: beforeURL,
+                        after: afterURL,
+                        video: videoURL
+                    },
+                    videoDuration: 30,
+                    aiAnalysis: {
+                        before: beforeAnalysis.slice(0, 3),
+                        after: afterAnalysis.slice(0, 3)
+                    },
+                    isSuspicious: false
+                };
+                
+                await database.ref('operations').push(operation);
+                
+                alert('✅ تم حفظ العملية بنجاح');
+                
+                capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
+                capturedVideoBlob = null;
+                document.getElementById('mediaThumbnails').innerHTML = '';
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                alert('❌ خطأ في حفظ العملية: ' + error.message);
+            } finally {
+                document.getElementById('aiAnalysisStatus').style.display = 'none';
+            }
+        }
+
+        // ====================================================================
+        // رفع الملفات
+        // ====================================================================
+        async function uploadMedia(blob, path) {
+            const ref = storage.ref().child(path);
+            await ref.put(blob);
+            return await ref.getDownloadURL();
+        }
+
+        // ====================================================================
+        // PAGE MANAGEMENT
+        // ====================================================================
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const page = document.getElementById(`page${pageName}`);
+            if (page) page.classList.add('active');
+            
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                hero.style.display = pageName === 'Hero' ? 'block' : 'none';
+            }
+            
+            if (pageName === 'DelegateRefuel') {
+                startCamera();
+            } else {
+                stopCamera();
+            }
+            
+            if (pageName === 'AdminDashboard') {
+                loadAdminDashboard();
+            }
+        }
+
+        // ====================================================================
+        // ADMIN DASHBOARD
+        // ====================================================================
+        async function loadAdminDashboard() {
+            try {
+                const delegatesSnap = await database.ref('delegate_requests').once('value');
+                const delegates = [];
+                let pending = 0, approved = 0;
+                
+                if (delegatesSnap.exists()) {
+                    delegatesSnap.forEach(child => {
+                        const d = child.val();
+                        d.id = child.key;
+                        delegates.push(d);
+                        if (d.status === 'pending') pending++;
+                        if (d.status === 'approved') approved++;
+                    });
+                }
+                
+                document.getElementById('totalDelegatesCount').innerText = delegates.length;
+                document.getElementById('pendingDelegatesCount').innerText = pending;
+                document.getElementById('approvedDelegatesCount').innerText = approved;
+                
+                const opsSnap = await database.ref('operations').once('value');
+                const ops = [];
+                let suspicious = 0;
+                
+                if (opsSnap.exists()) {
+                    opsSnap.forEach(child => {
+                        const op = child.val();
+                        op.id = child.key;
+                        ops.push(op);
+                        if (op.isSuspicious) suspicious++;
+                    });
+                }
+                
+                document.getElementById('totalOperationsCount').innerText = ops.length;
+                document.getElementById('suspiciousOperationsCount').innerText = suspicious;
+                
+                displayDelegates(delegates);
+                displayOperations(ops);
+                displaySuspicious(ops.filter(o => o.isSuspicious));
+                
+            } catch (error) {
+                console.error('Admin load error:', error);
+            }
+        }
+
+        function displayDelegates(delegates) {
+            const tbody = document.getElementById('delegatesTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            const pending = delegates.filter(d => d.status === 'pending');
+            
+            if (pending.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px;">${translations[currentLanguage].noDelegates}</td></tr>`;
+                return;
+            }
+            
+            pending.forEach((d, i) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td>${d.username || '-'}</td>
+                    <td>${d.email || 'غير محدد'}</td>
+                    <td>${d.project || '-'}</td>
+                    <td>${d.region || '-'}</td>
+                    <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${d.fuelType || 'ديزل'}</span></td>
+                    <td><span class="status-badge pending">${translations[currentLanguage].pending}</span></td>
+                    <td>
+                        <button onclick="approveDelegate('${d.id}')" class="action-btn" style="background: var(--success-emerald);">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button onclick="rejectDelegate('${d.id}')" class="action-btn" style="background: var(--danger-coral);">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                `;
+            });
+        }
+
+        function displayOperations(operations) {
+            const tbody = document.getElementById('operationsTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            if (operations.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 40px;">${translations[currentLanguage].noOperations}</td></tr>`;
+                return;
+            }
+            
+            operations.slice(-10).reverse().forEach((op, i) => {
+                const row = tbody.insertRow();
+                const date = op.timestamp ? new Date(op.timestamp).toLocaleString('ar-SA') : '-';
+                
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td>${op.delegateName || '-'}</td>
+                    <td>${op.project || '-'}</td>
+                    <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
+                    <td>
+                        ${op.media?.plate ? 
+                            `<a href="${op.media.plate}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.before ? 
+                            `<a href="${op.media.before}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.after ? 
+                            `<a href="${op.media.after}" target="_blank" class="media-preview-btn">
+                                <i class="fas fa-image"></i> عرض
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        ${op.media?.video ? 
+                            `<a href="${op.media.video}" target="_blank" class="media-preview-btn video">
+                                <i class="fas fa-video"></i> ${op.videoDuration || 30} ث
+                            </a>` : '-'}
+                    </td>
+                    <td>
+                        <button onclick="showLocation('${op.id}')" class="geo-badge">
+                            <i class="fas fa-map-marker-alt"></i> عرض الموقع
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails('${op.id}')" class="media-preview-btn warning">
+                            <i class="fas fa-chart-bar"></i> تفاصيل
+                        </button>
+                    </td>
+                    <td>${date}</td>
+                `;
+            });
+        }
+
+        function displaySuspicious(suspiciousOps) {
+            const tbody = document.getElementById('suspiciousTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            if (suspiciousOps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 40px;">لا توجد عمليات مشبوهة</td></tr>`;
+                return;
+            }
+            
+            suspiciousOps.slice().reverse().forEach((op, i) => {
+                const row = tbody.insertRow();
+                
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td>${op.delegateName || '-'}</td>
+                    <td>${op.project || '-'}</td>
+                    <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
+                    <td>
+                        <div style="display: flex; gap: 5px; justify-content: center;">
+                            ${op.media?.plate ? `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
+                            ${op.media?.before ? `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
+                            ${op.media?.after ? `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
+                            ${op.media?.video ? `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i></a>` : ''}
+                        </div>
+                    </td>
+                    <td>
+                        <button onclick="showLocation('${op.id}')" class="geo-badge">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="showAnalysis('${op.id}')" class="ai-badge">
+                            <i class="fas fa-robot"></i> عرض
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails('${op.id}')" class="media-preview-btn warning">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </td>
+                    <td><span class="ai-badge"><i class="fas fa-chart-line"></i> 85%</span></td>
+                `;
+            });
+        }
+
+        // ====================================================================
+        // MODAL FUNCTIONS
+        // ====================================================================
+        window.showLocation = async function(operationId) {
+            const op = await getOperationById(operationId);
+            if (!op) return;
+            
+            document.getElementById('modalTitle').innerText = 'موقع التعبئة';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        document.getElementById('locationCoordinates').innerHTML = 
+                            `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
+                        
+                        setTimeout(() => {
+                            if (!map) {
+                                map = L.map('mapContainer').setView([lat, lng], 15);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '© OpenStreetMap'
+                                }).addTo(map);
+                            } else {
+                                map.setView([lat, lng], 15);
+                            }
+                            
+                            if (currentMarker) {
+                                map.removeLayer(currentMarker);
+                            }
+                            
+                            currentMarker = L.marker([lat, lng]).addTo(map)
+                                .bindPopup('موقع التعبئة الحالي')
+                                .openPopup();
+                        }, 100);
+                    },
+                    (error) => {
+                        document.getElementById('locationCoordinates').innerHTML = 'غير متوفر';
+                    }
+                );
+            }
+            
+            document.getElementById('modalAnalysis').style.display = 'none';
+            document.getElementById('modalMedia').style.display = 'none';
+            document.getElementById('detailsModal').classList.add('active');
+        };
+
+        window.showAnalysis = async function(operationId) {
+            const op = await getOperationById(operationId);
+            if (!op) return;
+            
+            document.getElementById('modalTitle').innerText = 'تحليل الذكاء الاصطناعي';
+            
+            let analysisHtml = '';
+            if (op.aiAnalysis?.before) {
+                analysisHtml += '<h4>تحليل صورة العداد قبل:</h4>';
+                op.aiAnalysis.before.forEach(pred => {
+                    analysisHtml += `
+                        <div class="analysis-item">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${pred.className}</span>
+                                <span>${Math.round(pred.probability * 100)}%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${pred.probability * 100}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (op.aiAnalysis?.after) {
+                analysisHtml += '<h4 style="margin-top: 15px;">تحليل صورة العداد بعد:</h4>';
+                op.aiAnalysis.after.forEach(pred => {
+                    analysisHtml += `
+                        <div class="analysis-item">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${pred.className}</span>
+                                <span>${Math.round(pred.probability * 100)}%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${pred.probability * 100}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('analysisContent').innerHTML = analysisHtml || 'لا توجد بيانات تحليل';
+            
+            document.getElementById('modalLocation').style.display = 'none';
+            document.getElementById('modalMedia').style.display = 'none';
+            document.getElementById('modalAnalysis').style.display = 'block';
+            document.getElementById('detailsModal').classList.add('active');
+        };
+
+        window.showDetails = async function(operationId) {
+            const op = await getOperationById(operationId);
+            if (!op) return;
+            
+            document.getElementById('modalTitle').innerText = 'تفاصيل العملية';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        document.getElementById('locationCoordinates').innerHTML = 
+                            `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
+                        
+                        setTimeout(() => {
+                            if (!map) {
+                                map = L.map('mapContainer').setView([lat, lng], 15);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                            } else {
+                                map.setView([lat, lng], 15);
+                            }
+                            
+                            if (currentMarker) map.removeLayer(currentMarker);
+                            currentMarker = L.marker([lat, lng]).addTo(map)
+                                .bindPopup('موقع التعبئة').openPopup();
+                        }, 100);
+                    },
+                    () => {}
+                );
+            }
+            
+            let analysisHtml = '';
+            if (op.aiAnalysis?.before) {
+                analysisHtml += '<h4>تحليل العداد قبل:</h4>';
+                op.aiAnalysis.before.forEach(pred => {
+                    analysisHtml += `<div>${pred.className}: ${Math.round(pred.probability * 100)}%</div>`;
+                });
+            }
+            document.getElementById('analysisContent').innerHTML = analysisHtml || 'لا يوجد تحليل';
+            
+            let mediaHtml = '';
+            if (op.media?.plate) mediaHtml += `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> اللوحة</a>`;
+            if (op.media?.before) mediaHtml += `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> قبل</a>`;
+            if (op.media?.after) mediaHtml += `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> بعد</a>`;
+            if (op.media?.video) mediaHtml += `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i> فيديو</a>`;
+            document.getElementById('mediaLinks').innerHTML = mediaHtml;
+            
+            document.getElementById('modalLocation').style.display = 'block';
+            document.getElementById('modalAnalysis').style.display = 'block';
+            document.getElementById('modalMedia').style.display = 'block';
+            document.getElementById('detailsModal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('detailsModal').classList.remove('active');
+        };
+
+        async function getOperationById(id) {
+            try {
+                const snap = await database.ref('operations/' + id).once('value');
+                return snap.val();
+            } catch (error) {
+                console.error('Error getting operation:', error);
+                return null;
+            }
+        }
+
+        // ====================================================================
+        // DELEGATE ACTIONS
+        // ====================================================================
+        window.approveDelegate = async function(id) {
+            try {
+                await database.ref('delegate_requests/' + id).update({ status: 'approved' });
+                alert('✅ تمت الموافقة');
+                loadAdminDashboard();
+            } catch (error) {
+                alert('❌ خطأ: ' + error.message);
+            }
+        };
+        
+        window.rejectDelegate = async function(id) {
+            try {
+                await database.ref('delegate_requests/' + id).update({ status: 'rejected' });
+                alert('✅ تم الرفض');
+                loadAdminDashboard();
+            } catch (error) {
+                alert('❌ خطأ: ' + error.message);
+            }
+        };
+
+        // ====================================================================
+        // SETUP DATABASE
+        // ====================================================================
+        async function setupDatabase() {
+            try {
+                const testRef = database.ref('.info/connected');
+                testRef.on('value', (snap) => {
+                    if (snap.val() === true) {
+                        console.log('✅ متصل بقاعدة البيانات');
+                        
+                        const setupRef = database.ref('_setup');
+                        setupRef.set({
+                            timestamp: new Date().toISOString(),
+                            status: 'initialized'
+                        }).then(() => {
+                            console.log('✅ تم إنشاء بيانات الإعداد');
+                            setupRef.remove();
+                        }).catch((error) => {
+                            console.error('❌ خطأ في الإعداد:', error);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Setup error:', error);
+            }
+        }
+
+        // ====================================================================
+        // INITIALIZATION
+        // ====================================================================
+        window.addEventListener('load', () => {
+            setupDatabase();
+            
+            // إنشاء حساب admin
+            auth.createUserWithEmailAndPassword('admin@al-zahrani.com', 'Admin@123')
+                .then(() => {
+                    console.log('✅ تم إنشاء حساب المدير');
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        console.log('✅ حساب المدير موجود مسبقاً');
+                    }
+                });
+            
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('appMain').classList.remove('hidden');
+                    AOS.init();
+                    setLanguage(localStorage.getItem('preferredLang') || 'ar');
+                    loadAIModel();
+                }, 500);
+            }, 2000);
+        });
+
+        // ====================================================================
+        // EVENT LISTENERS
+        // ====================================================================
+        document.getElementById('langAr').addEventListener('click', () => setLanguage('ar'));
+        document.getElementById('langEn').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('languageOrb').addEventListener('click', () => setLanguage(currentLanguage === 'ar' ? 'en' : 'ar'));
+        
+        document.getElementById('heroLoginBtn').addEventListener('click', () => showPage('DelegateLogin'));
+        document.getElementById('backToHeroBtn').addEventListener('click', (e) => { e.preventDefault(); showPage('Hero'); });
+        document.getElementById('showSignupBtn').addEventListener('click', () => showPage('DelegateSignup'));
+        document.getElementById('backToLoginBtn').addEventListener('click', (e) => { e.preventDefault(); showPage('DelegateLogin'); });
+        
+        document.getElementById('capturePlateBtn').addEventListener('click', () => captureImage('plate'));
+        document.getElementById('captureBeforeBtn').addEventListener('click', () => captureImage('before'));
+        document.getElementById('captureAfterBtn').addEventListener('click', () => captureImage('after'));
+        document.getElementById('startVideoBtn').addEventListener('click', startVideoRecording);
+        document.getElementById('stopVideoBtn').addEventListener('click', stopVideoRecording);
+        document.getElementById('saveRefuelOperationBtn').addEventListener('click', saveOperation);
+        
+        document.getElementById('delegateLogoutBtn').addEventListener('click', async () => { await auth.signOut(); showPage('DelegateLogin'); });
+        document.getElementById('adminLogoutBtn').addEventListener('click', async () => { await auth.signOut(); showPage('DelegateLogin'); });
+        
+        // PWA Install Buttons
+        document.getElementById('installFab').addEventListener('click', installApp);
+        document.getElementById('installAppBtn').addEventListener('click', installApp);
+        document.getElementById('closeInstallBanner').addEventListener('click', () => {
+            document.getElementById('installBanner').classList.add('hidden');
+        });
+        
+        // Tabs
+        document.getElementById('delegatesTabBtn').addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('delegatesTab').classList.remove('hidden');
+        });
+        
+        document.getElementById('operationsTabBtn').addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('operationsTab').classList.remove('hidden');
+        });
+        
+        document.getElementById('suspiciousTabBtn').addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('suspiciousTab').classList.remove('hidden');
+        });
+        
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!document.getElementById('agreeTerms').checked) {
+                alert('الرجاء الموافقة على الشروط');
+                return;
+            }
+            
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const email = document.getElementById('signupEmail').value || null;
+            
+            try {
+                const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
+                if (usersSnap.exists()) {
+                    alert('❌ اسم المستخدم موجود بالفعل');
+                    return;
+                }
+                
+                const userEmail = email || `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local`;
+                const user = await auth.createUserWithEmailAndPassword(userEmail, password);
+                
+                let project = document.getElementById('signupProject').value;
+                if (project === 'manual') project = document.getElementById('signupManualProject').value;
+                
+                let region = document.getElementById('signupRegion').value;
+                if (region === 'manual') region = document.getElementById('signupManualRegion').value;
+                
+                await database.ref('delegate_requests/' + user.user.uid).set({
+                    username: username,
+                    email: email || 'غير محدد',
+                    project: project,
+                    region: region,
+                    fuelType: document.getElementById('signupFuelType').value,
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    uid: user.user.uid
+                });
+                
+                alert('✅ تم التسجيل بنجاح');
+                showPage('DelegateLogin');
+                
+            } catch (error) {
+                console.error('Signup error:', error);
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    alert('❌ البريد الإلكتروني مستخدم بالفعل');
+                } else {
+                    alert('❌ خطأ: ' + error.message);
+                }
+            }
+        });
+        
+        // Login
+        document.getElementById('delegateLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                if (username === 'admin') {
+                    const user = await auth.signInWithEmailAndPassword('admin@al-zahrani.com', password);
+                    showPage('AdminDashboard');
+                    return;
+                }
+                
+                const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
+                let userData = null;
+                let userId = null;
+                
+                usersSnap.forEach(child => {
+                    userData = child.val();
+                    userId = child.key;
+                });
+                
+                if (!userData) {
+                    alert('❌ اسم المستخدم غير موجود');
+                    return;
+                }
+                
+                const userEmail = userData.email === 'غير محدد' ? 
+                    `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local` : 
+                    userData.email;
+                
+                const user = await auth.signInWithEmailAndPassword(userEmail, password);
+                
+                if (userData.status !== 'approved') {
+                    alert('❌ الحساب غير معتمد بعد');
+                    await auth.signOut();
+                    return;
+                }
+                
+                currentUser = user.user;
+                currentUserData = userData;
+                
+                document.getElementById('delegateNameSpan').innerText = userData.username;
+                document.getElementById('delegateProjectSpan').innerText = userData.project;
+                document.getElementById('delegateRegionSpan').innerText = userData.region;
+                document.getElementById('delegateFuelTypeSpan').innerText = userData.fuelType;
+                
+                showPage('DelegateRefuel');
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('❌ خطأ في تسجيل الدخول: ' + error.message);
+            }
+        });
+        
+        // Manual fields
+        document.getElementById('signupProject').addEventListener('change', function() {
+            document.getElementById('signupManualProjectContainer').classList.toggle('hidden', this.value !== 'manual');
+        });
+        document.getElementById('signupRegion').addEventListener('change', function() {
+            document.getElementById('signupManualRegionContainer').classList.toggle('hidden', this.value !== 'manual');
+        });
+        
+        // Toggle password
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('toggle-password')) {
+                const input = e.target.previousElementSibling;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                e.target.classList.toggle('fa-eye');
+                e.target.classList.toggle('fa-eye-slash');
+            }
+        });
+    </script>
+</body>
+</html>
