@@ -80,7 +80,7 @@
         }
         
         /* ==================================================================== */
-        /* INSTALL BUTTON - زر تثبيت التطبيق على الجوال - محسن                    */
+        /* INSTALL BUTTON                                                      */
         /* ==================================================================== */
         .install-fab {
             position: fixed;
@@ -166,7 +166,7 @@
         }
         
         /* ==================================================================== */
-        /* PWA INSTALL BANNER - محسن للتثبيت على سطح المكتب                      */
+        /* PWA INSTALL BANNER                                                  */
         /* ==================================================================== */
         .install-banner {
             position: fixed;
@@ -274,7 +274,7 @@
         }
         
         /* ==================================================================== */
-        /* PROGRESS BAR - شريط التقدم المحسن والسريع                           */
+        /* PROGRESS OVERLAY - محسن بالكامل                                     */
         /* ==================================================================== */
         .progress-overlay {
             position: fixed;
@@ -322,7 +322,6 @@
             margin: 0 auto 20px;
             font-size: 40px;
             color: white;
-            animation: pulse 2s infinite;
         }
         
         .progress-title {
@@ -369,7 +368,7 @@
         }
         
         /* ==================================================================== */
-        /* QUICK SAVE - حفظ سريع بدون تحليل                                   */
+        /* QUICK SAVE BUTTON                                                   */
         /* ==================================================================== */
         .quick-save-btn {
             background: linear-gradient(145deg, var(--success-emerald), #0b8a5c);
@@ -1219,7 +1218,7 @@
 </head>
 <body>
     <!-- ========================================== -->
-    <!-- INSTALL BUTTON - زر تثبيت التطبيق على الجوال -->
+    <!-- INSTALL BUTTON                             -->
     <!-- ========================================== -->
     <div id="installFab" class="install-fab">
         <span class="badge">1</span>
@@ -1228,7 +1227,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PWA INSTALL BANNER - محسن للتثبيت          -->
+    <!-- PWA INSTALL BANNER                         -->
     <!-- ========================================== -->
     <div id="installBanner" class="install-banner">
         <div class="install-banner-content">
@@ -1251,7 +1250,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PROGRESS OVERLAY - شريط التقدم المحسن      -->
+    <!-- PROGRESS OVERLAY - محسن بالكامل            -->
     <!-- ========================================== -->
     <div id="progressOverlay" class="progress-overlay">
         <div class="progress-card">
@@ -1582,7 +1581,7 @@
                         </div>
                     </div>
                     
-                    <!-- زر الحفظ السريع -->
+                    <!-- أزرار الحفظ -->
                     <button id="quickSaveBtn" class="quick-save-btn" style="margin-bottom: 10px;">
                         <i class="fas fa-bolt"></i> حفظ سريع (بدون تحليل)
                     </button>
@@ -1741,7 +1740,7 @@
     <!-- Manifest JSON                              -->
     <!-- ========================================== -->
     <script>
-        // إنشاء manifest.json للتثبيت على سطح المكتب
+        // إنشاء manifest.json للتثبيت
         const manifest = {
             name: "الطريق الذكي الزهراني",
             short_name: "الطريق الذكي",
@@ -1797,7 +1796,7 @@
         const storage = firebase.storage();
 
         // ====================================================================
-        // PWA INSTALL HANDLER - محسن للتثبيت على سطح المكتب
+        // PWA INSTALL HANDLER
         // ====================================================================
         let deferredPrompt = null;
         
@@ -1805,47 +1804,34 @@
             e.preventDefault();
             deferredPrompt = e;
             console.log('✅ يمكن تثبيت التطبيق');
-            
-            // إظهار أزرار التثبيت
-            document.getElementById('installFab').style.display = 'flex';
-            document.getElementById('installBanner').style.display = 'flex';
         });
 
         async function installApp() {
             if (!deferredPrompt) {
-                // إذا لم يكن هناك حدث تثبيت، نظهر تعليمات يدوية
                 alert(currentLanguage === 'ar' ? 
-                    'يمكنك تثبيت التطبيق يدوياً:\n' +
-                    '1. اضغط على قائمة المتصفح (ثلاث نقاط)\n' +
-                    '2. اختر "تثبيت التطبيق" أو "إضافة للشاشة الرئيسية"' : 
-                    'You can install the app manually:\n' +
-                    '1. Tap the browser menu (three dots)\n' +
-                    '2. Choose "Install App" or "Add to Home Screen"');
+                    'يمكنك تثبيت التطبيق يدوياً من قائمة المتصفح' : 
+                    'You can install the app manually from the browser menu');
                 return;
             }
             
-            // إظهار نافذة التثبيت
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             
             if (outcome === 'accepted') {
                 console.log('✅ تم تثبيت التطبيق');
-                // إخفاء أزرار التثبيت بعد التثبيت
-                document.getElementById('installFab').style.display = 'none';
-                document.getElementById('installBanner').style.display = 'none';
             }
             
             deferredPrompt = null;
         }
 
-        // التحقق مما إذا كان التطبيق مثبتاً
+        // التحقق من وضع التثبيت
         if (window.matchMedia('(display-mode: standalone)').matches) {
             document.getElementById('installFab').style.display = 'none';
             document.getElementById('installBanner').style.display = 'none';
         }
 
         // ====================================================================
-        // PROGRESS FUNCTIONS - محسنة للسرعة
+        // PROGRESS FUNCTIONS
         // ====================================================================
         function showProgress(step, percent) {
             const overlay = document.getElementById('progressOverlay');
@@ -1870,9 +1856,7 @@
         }
 
         function hideProgress() {
-            setTimeout(() => {
-                document.getElementById('progressOverlay').classList.remove('active');
-            }, 500);
+            document.getElementById('progressOverlay').classList.remove('active');
         }
 
         // ====================================================================
@@ -2111,7 +2095,7 @@
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
             
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.7)); // تقليل الجودة للسرعة
             const url = URL.createObjectURL(blob);
             
             const thumb = document.createElement('img');
@@ -2149,6 +2133,7 @@
             
             mediaRecorder = new MediaRecorder(mediaStream, {
                 mimeType: 'video/webm;codecs=vp9',
+                videoBitsPerSecond: 500000, // تقليل الجودة للسرعة
                 audioBitsPerSecond: 0
             });
             
@@ -2185,7 +2170,33 @@
         }
 
         // ====================================================================
-        // حفظ سريع - بدون تحليل
+        // رفع ملف واحد مع تتبع التقدم
+        // ====================================================================
+        function uploadMedia(blob, path) {
+            return new Promise((resolve, reject) => {
+                const ref = storage.ref().child(path);
+                const uploadTask = ref.put(blob);
+                
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // تحديث التقدم
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log(`Upload ${path}: ${progress}%`);
+                    },
+                    (error) => {
+                        reject(error);
+                    },
+                    () => {
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            resolve(downloadURL);
+                        });
+                    }
+                );
+            });
+        }
+
+        // ====================================================================
+        // حفظ سريع محسن
         // ====================================================================
         async function quickSaveOperation() {
             if (!currentUser) {
@@ -2199,20 +2210,33 @@
             }
             
             try {
-                showProgress('جاري الحفظ السريع...', 10);
+                showProgress('جاري تجهيز الملفات...', 10);
                 
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
-                // رفع الملفات بشكل متوازي للسرعة
+                // تقليل حجم الصور
+                updateProgress('جاري تحسين جودة الصور...', 20);
+                
+                // رفع الملفات بشكل متوازي
                 updateProgress('جاري رفع الملفات...', 30);
                 
-                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
+                const startTime = Date.now();
+                
+                const uploadPromises = [
                     uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
                     uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
                     uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
                     uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
+                ];
+                
+                const [plateURL, beforeURL, afterURL, videoURL] = await Promise.race([
+                    Promise.all(uploadPromises),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('انتهت مهلة الرفع')), 30000))
                 ]);
+                
+                const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
+                console.log(`✅ تم رفع الملفات في ${uploadTime} ثانية`);
                 
                 updateProgress('جاري حفظ البيانات...', 80);
                 
@@ -2231,15 +2255,17 @@
                     },
                     videoDuration: 30,
                     isSuspicious: false,
-                    quickSave: true
+                    quickSave: true,
+                    uploadTime: uploadTime
                 };
                 
                 await database.ref('operations').push(operation);
                 
-                updateProgress('تم الحفظ بنجاح!', 100);
+                updateProgress('✓ تم الحفظ بنجاح!', 100);
+                
                 setTimeout(() => {
-                    alert('✅ تم حفظ العملية بنجاح');
                     hideProgress();
+                    alert(`✅ تم حفظ العملية بنجاح في ${uploadTime} ثانية`);
                 }, 500);
                 
                 // إعادة تعيين
@@ -2274,8 +2300,13 @@
                 const operationId = Date.now().toString();
                 const userId = currentUser.uid;
                 
+                // تقليل حجم الصور
+                updateProgress('جاري تحسين جودة الصور...', 20);
+                
                 // رفع الملفات بشكل متوازي
                 updateProgress('جاري رفع الملفات...', 30);
+                
+                const startTime = Date.now();
                 
                 const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
                     uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
@@ -2283,6 +2314,8 @@
                     uploadMedia(capturedAfterImage.blob, `operations/${userId}/${operationId}/after.jpg`),
                     uploadMedia(capturedVideoBlob, `operations/${userId}/${operationId}/video.webm`)
                 ]);
+                
+                const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
                 
                 updateProgress('جاري تحليل الصور...', 60);
                 
@@ -2312,15 +2345,17 @@
                         before: beforeAnalysis.slice(0, 3),
                         after: afterAnalysis.slice(0, 3)
                     },
-                    isSuspicious: false
+                    isSuspicious: false,
+                    uploadTime: uploadTime
                 };
                 
                 await database.ref('operations').push(operation);
                 
-                updateProgress('تم الحفظ بنجاح!', 100);
+                updateProgress('✓ تم الحفظ بنجاح!', 100);
+                
                 setTimeout(() => {
-                    alert('✅ تم حفظ العملية مع التحليل');
                     hideProgress();
+                    alert(`✅ تم حفظ العملية مع التحليل في ${uploadTime} ثانية`);
                 }, 500);
                 
                 // إعادة تعيين
@@ -2333,15 +2368,6 @@
                 hideProgress();
                 alert('❌ خطأ في حفظ العملية: ' + error.message);
             }
-        }
-
-        // ====================================================================
-        // رفع الملفات
-        // ====================================================================
-        async function uploadMedia(blob, path) {
-            const ref = storage.ref().child(path);
-            await ref.put(blob);
-            return await ref.getDownloadURL();
         }
 
         // ====================================================================
