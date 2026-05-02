@@ -394,6 +394,52 @@
         }
         
         /* ==================================================================== */
+        /* CHANGE PASSWORD MODAL                                               */
+        /* ==================================================================== */
+        .change-pw-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000001;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .change-pw-modal.active {
+            display: flex;
+        }
+        
+        .change-pw-content {
+            background: white;
+            border-radius: 48px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .change-pw-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--danger-coral);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 20px;
+        }
+        
+        /* ==================================================================== */
         /* HERO VIDEO SECTION                                                  */
         /* ==================================================================== */
         .hero-section {
@@ -912,6 +958,14 @@
             align-items: center;
             justify-content: space-between;
             color: white;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         .stats-grid {
@@ -1197,7 +1251,7 @@
         /* ==================================================================== */
         @media (max-width: 992px) {
             .hero-title { font-size: 48px; }
-            .admin-header { flex-direction: column; gap: 15px; }
+            .admin-header { flex-direction: column; align-items: stretch; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .install-banner { flex-direction: column; gap: 15px; text-align: center; }
         }
@@ -1251,7 +1305,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PROGRESS OVERLAY - محسن نهائي              -->
+    <!-- PROGRESS OVERLAY                           -->
     <!-- ========================================== -->
     <div id="progressOverlay" class="progress-overlay">
         <div class="progress-card">
@@ -1267,6 +1321,34 @@
                 <i class="fas fa-spinner fa-spin"></i>
                 <span>0%</span>
             </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- CHANGE PASSWORD MODAL                      -->
+    <!-- ========================================== -->
+    <div id="changePwModal" class="change-pw-modal">
+        <div class="change-pw-content">
+            <button class="change-pw-close" onclick="closeChangePwModal()"><i class="fas fa-times"></i></button>
+            <h2 style="margin-bottom: 20px; color: var(--primary-royal);">تغيير كلمة المرور</h2>
+            <form id="changePasswordForm">
+                <div class="floating-group">
+                    <input type="password" id="currentPassword" class="floating-input" placeholder=" " required>
+                    <label class="floating-label">كلمة المرور الحالية</label>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <div class="floating-group">
+                    <input type="password" id="newPassword" class="floating-input" placeholder=" " required>
+                    <label class="floating-label">كلمة المرور الجديدة</label>
+                    <i class="fas fa-key input-icon"></i>
+                </div>
+                <div class="floating-group">
+                    <input type="password" id="confirmPassword" class="floating-input" placeholder=" " required>
+                    <label class="floating-label">تأكيد كلمة المرور الجديدة</label>
+                    <i class="fas fa-check-circle input-icon"></i>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 10px;">تغيير كلمة المرور</button>
+            </form>
         </div>
     </div>
 
@@ -1517,7 +1599,7 @@
         </div>
 
         <!-- ====================================== -->
-        <!-- PAGE: DELEGATE REFUEL - مع حفظ محسن      -->
+        <!-- PAGE: DELEGATE REFUEL                  -->
         <!-- ====================================== -->
         <div id="pageDelegateRefuel" class="page">
             <div style="display: flex; align-items: center; justify-content: center; min-height: 85vh; padding: 20px;">
@@ -1615,10 +1697,13 @@
                             <p style="margin: 5px 0 0; opacity: 0.9;" data-translate="welcomeAdmin">الطريق الذكي الزهراني</p>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="admin-actions">
                         <span id="adminEmailDisplay" style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px;">
-                            admin@al-zahrani.com
+                            هوندا
                         </span>
+                        <button id="changePasswordBtn" class="btn-primary" style="width: auto; padding: 12px 20px; background: var(--warning-amber);">
+                            <i class="fas fa-key"></i> تغيير كلمة المرور
+                        </button>
                         <button id="adminLogoutBtn" class="btn-primary" style="width: auto; padding: 12px 28px; background: var(--danger-coral);">
                             <i class="fas fa-sign-out-alt"></i> <span data-translate="logout">خروج</span>
                         </button>
@@ -1629,7 +1714,7 @@
                     <div class="stat-card">
                         <i class="fas fa-users"></i>
                         <h4 data-translate="totalDelegates">إجمالي المندوبين</h4>
-                        <h2 id="totalDelegatesCount">5</h2>
+                        <h2 id="totalDelegatesCount">0</h2>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-user-clock"></i>
@@ -1639,12 +1724,12 @@
                     <div class="stat-card">
                         <i class="fas fa-check-circle"></i>
                         <h4 data-translate="approvedDelegates">مندوبين معتمدين</h4>
-                        <h2 id="approvedDelegatesCount">4</h2>
+                        <h2 id="approvedDelegatesCount">0</h2>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-gas-pump"></i>
                         <h4 data-translate="totalOperations">إجمالي العمليات</h4>
-                        <h2 id="totalOperationsCount">1</h2>
+                        <h2 id="totalOperationsCount">0</h2>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -1737,45 +1822,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- Manifest JSON                              -->
-    <!-- ========================================== -->
-    <script>
-        // إنشاء manifest.json للتثبيت
-        const manifest = {
-            name: "الطريق الذكي الزهراني",
-            short_name: "الطريق الذكي",
-            description: "نظام إدارة الأسطول المتطور مع الذكاء الاصطناعي",
-            start_url: "/",
-            display: "standalone",
-            background_color: "#0a1a2f",
-            theme_color: "#0a1a2f",
-            orientation: "any",
-            scope: "/",
-            icons: [
-                {
-                    src: "https://via.placeholder.com/192x192/0a1a2f/38bdf8?text=AZ",
-                    sizes: "192x192",
-                    type: "image/png",
-                    purpose: "any maskable"
-                },
-                {
-                    src: "https://via.placeholder.com/512x512/0a1a2f/38bdf8?text=AZ",
-                    sizes: "512x512",
-                    type: "image/png",
-                    purpose: "any maskable"
-                }
-            ]
-        };
-        
-        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-        const manifestURL = URL.createObjectURL(manifestBlob);
-        const manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
-        manifestLink.href = manifestURL;
-        document.head.appendChild(manifestLink);
-    </script>
-
     <script>
         // ====================================================================
         // FIREBASE CONFIGURATION
@@ -1795,6 +1841,11 @@
         const auth = firebase.auth();
         const database = firebase.database();
         const storage = firebase.storage();
+
+        // بيانات المدير الجديدة
+        const ADMIN_USERNAME = "هوندا";
+        const ADMIN_EMAIL = "honda@al-zahrani.com";
+        const ADMIN_PASSWORD = "123321@#";
 
         // ====================================================================
         // PWA INSTALL HANDLER
@@ -2092,13 +2143,12 @@
         }
 
         // ====================================================================
-        // التقاط الصور - بحجم صغير جداً للسرعة
+        // التقاط الصور
         // ====================================================================
         async function captureImage(type) {
             const video = document.getElementById('cameraPreview');
             const canvas = document.createElement('canvas');
             
-            // تصغير حجم الصورة بشكل كبير جداً للسرعة
             const maxWidth = 400;
             const scale = Math.min(maxWidth / video.videoWidth, 1);
             canvas.width = video.videoWidth * scale;
@@ -2106,7 +2156,6 @@
             
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // ضغط عالي جداً للسرعة
             const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.4));
             const url = URL.createObjectURL(blob);
             
@@ -2132,7 +2181,7 @@
         }
 
         // ====================================================================
-        // تسجيل الفيديو - بجودة منخفضة جداً للسرعة
+        // تسجيل الفيديو
         // ====================================================================
         function startVideoRecording() {
             if (!mediaStream) {
@@ -2145,7 +2194,7 @@
             
             mediaRecorder = new MediaRecorder(mediaStream, {
                 mimeType: 'video/webm;codecs=vp9',
-                videoBitsPerSecond: 100000, // جودة منخفضة جداً للسرعة
+                videoBitsPerSecond: 100000,
                 audioBitsPerSecond: 0
             });
             
@@ -2182,7 +2231,7 @@
         }
 
         // ====================================================================
-        // رفع ملف واحد - بدون مهلة زمنية
+        // رفع ملف واحد
         // ====================================================================
         function uploadMedia(blob, path) {
             return new Promise((resolve, reject) => {
@@ -2190,12 +2239,8 @@
                 const uploadTask = ref.put(blob);
                 
                 uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // لا نفعل شيئاً هنا لتسريع العملية
-                    },
-                    (error) => {
-                        reject(error);
-                    },
+                    (snapshot) => {},
+                    (error) => { reject(error); },
                     () => {
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                             resolve(downloadURL);
@@ -2206,7 +2251,7 @@
         }
 
         // ====================================================================
-        // حفظ سريع محسن - بدون إعادة محاولة
+        // حفظ سريع
         // ====================================================================
         async function quickSaveOperation() {
             if (!currentUser) {
@@ -2227,7 +2272,6 @@
                 
                 const startTime = Date.now();
                 
-                // رفع الملفات بشكل متوازي - بدون مهلة
                 const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
                     uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
                     uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
@@ -2267,7 +2311,6 @@
                     alert(`✅ تم حفظ العملية بنجاح في ${uploadTime} ثانية`);
                 }, 500);
                 
-                // إعادة تعيين
                 capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
                 capturedVideoBlob = null;
                 document.getElementById('mediaThumbnails').innerHTML = '';
@@ -2301,7 +2344,6 @@
                 
                 const startTime = Date.now();
                 
-                // رفع الملفات بشكل متوازي - بدون مهلة
                 const [plateURL, beforeURL, afterURL, videoURL] = await Promise.all([
                     uploadMedia(capturedPlateImage.blob, `operations/${userId}/${operationId}/plate.jpg`),
                     uploadMedia(capturedBeforeImage.blob, `operations/${userId}/${operationId}/before.jpg`),
@@ -2313,7 +2355,6 @@
                 
                 updateProgress('جاري تحليل الصور...', 60);
                 
-                // تحليل الصور
                 const [beforeAnalysis, afterAnalysis] = await Promise.all([
                     analyzeImage(capturedBeforeImage.element).catch(() => []),
                     analyzeImage(capturedAfterImage.element).catch(() => [])
@@ -2352,7 +2393,6 @@
                     alert(`✅ تم حفظ العملية مع التحليل في ${uploadTime} ثانية`);
                 }, 500);
                 
-                // إعادة تعيين
                 capturedPlateImage = capturedBeforeImage = capturedAfterImage = null;
                 capturedVideoBlob = null;
                 document.getElementById('mediaThumbnails').innerHTML = '';
@@ -2489,40 +2529,12 @@
                     <td>${op.delegateName || '-'}</td>
                     <td>${op.project || '-'}</td>
                     <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
-                    <td>
-                        ${op.media?.plate ? 
-                            `<a href="${op.media.plate}" target="_blank" class="media-preview-btn">
-                                <i class="fas fa-image"></i> عرض
-                            </a>` : '-'}
-                    </td>
-                    <td>
-                        ${op.media?.before ? 
-                            `<a href="${op.media.before}" target="_blank" class="media-preview-btn">
-                                <i class="fas fa-image"></i> عرض
-                            </a>` : '-'}
-                    </td>
-                    <td>
-                        ${op.media?.after ? 
-                            `<a href="${op.media.after}" target="_blank" class="media-preview-btn">
-                                <i class="fas fa-image"></i> عرض
-                            </a>` : '-'}
-                    </td>
-                    <td>
-                        ${op.media?.video ? 
-                            `<a href="${op.media.video}" target="_blank" class="media-preview-btn video">
-                                <i class="fas fa-video"></i> ${op.videoDuration || 30} ث
-                            </a>` : '-'}
-                    </td>
-                    <td>
-                        <button onclick="showLocation('${op.id}')" class="geo-badge">
-                            <i class="fas fa-map-marker-alt"></i> عرض الموقع
-                        </button>
-                    </td>
-                    <td>
-                        <button onclick="showDetails('${op.id}')" class="media-preview-btn warning">
-                            <i class="fas fa-chart-bar"></i> تفاصيل
-                        </button>
-                    </td>
+                    <td>${op.media?.plate ? `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> عرض</a>` : '-'}</td>
+                    <td>${op.media?.before ? `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> عرض</a>` : '-'}</td>
+                    <td>${op.media?.after ? `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> عرض</a>` : '-'}</td>
+                    <td>${op.media?.video ? `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i> ${op.videoDuration || 30} ث</a>` : '-'}</td>
+                    <td><button onclick="showLocation('${op.id}')" class="geo-badge"><i class="fas fa-map-marker-alt"></i> عرض الموقع</button></td>
+                    <td><button onclick="showDetails('${op.id}')" class="media-preview-btn warning"><i class="fas fa-chart-bar"></i> تفاصيل</button></td>
                     <td>${date}</td>
                 `;
             });
@@ -2540,35 +2552,15 @@
             
             suspiciousOps.slice().reverse().forEach((op, i) => {
                 const row = tbody.insertRow();
-                
                 row.innerHTML = `
                     <td>${i + 1}</td>
                     <td>${op.delegateName || '-'}</td>
                     <td>${op.project || '-'}</td>
                     <td><span style="background: var(--gray-100); padding: 5px 15px; border-radius: 50px;">${op.fuelType || 'ديزل'}</span></td>
-                    <td>
-                        <div style="display: flex; gap: 5px; justify-content: center;">
-                            ${op.media?.plate ? `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
-                            ${op.media?.before ? `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
-                            ${op.media?.after ? `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}
-                            ${op.media?.video ? `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i></a>` : ''}
-                        </div>
-                    </td>
-                    <td>
-                        <button onclick="showLocation('${op.id}')" class="geo-badge">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button onclick="showAnalysis('${op.id}')" class="ai-badge">
-                            <i class="fas fa-robot"></i> عرض
-                        </button>
-                    </td>
-                    <td>
-                        <button onclick="showDetails('${op.id}')" class="media-preview-btn warning">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                    </td>
+                    <td><div style="display: flex; gap: 5px; justify-content: center;">${op.media?.plate ? `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}${op.media?.before ? `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}${op.media?.after ? `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i></a>` : ''}${op.media?.video ? `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i></a>` : ''}</div></td>
+                    <td><button onclick="showLocation('${op.id}')" class="geo-badge"><i class="fas fa-map-marker-alt"></i></button></td>
+                    <td><button onclick="showAnalysis('${op.id}')" class="ai-badge"><i class="fas fa-robot"></i> عرض</button></td>
+                    <td><button onclick="showDetails('${op.id}')" class="media-preview-btn warning"><i class="fas fa-info-circle"></i></button></td>
                     <td><span class="ai-badge"><i class="fas fa-chart-line"></i> 85%</span></td>
                 `;
             });
@@ -2588,32 +2580,19 @@
                     (position) => {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
-                        
-                        document.getElementById('locationCoordinates').innerHTML = 
-                            `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
-                        
+                        document.getElementById('locationCoordinates').innerHTML = `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
                         setTimeout(() => {
                             if (!map) {
                                 map = L.map('mapContainer').setView([lat, lng], 15);
-                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                    attribution: '© OpenStreetMap'
-                                }).addTo(map);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
                             } else {
                                 map.setView([lat, lng], 15);
                             }
-                            
-                            if (currentMarker) {
-                                map.removeLayer(currentMarker);
-                            }
-                            
-                            currentMarker = L.marker([lat, lng]).addTo(map)
-                                .bindPopup('موقع التعبئة الحالي')
-                                .openPopup();
+                            if (currentMarker) map.removeLayer(currentMarker);
+                            currentMarker = L.marker([lat, lng]).addTo(map).bindPopup('موقع التعبئة الحالي').openPopup();
                         }, 100);
                     },
-                    (error) => {
-                        document.getElementById('locationCoordinates').innerHTML = 'غير متوفر';
-                    }
+                    () => { document.getElementById('locationCoordinates').innerHTML = 'غير متوفر'; }
                 );
             }
             
@@ -2625,46 +2604,21 @@
         window.showAnalysis = async function(operationId) {
             const op = await getOperationById(operationId);
             if (!op) return;
-            
             document.getElementById('modalTitle').innerText = 'تحليل الذكاء الاصطناعي';
-            
             let analysisHtml = '';
             if (op.aiAnalysis?.before) {
                 analysisHtml += '<h4>تحليل صورة العداد قبل:</h4>';
                 op.aiAnalysis.before.forEach(pred => {
-                    analysisHtml += `
-                        <div class="analysis-item">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>${pred.className}</span>
-                                <span>${Math.round(pred.probability * 100)}%</span>
-                            </div>
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${pred.probability * 100}%"></div>
-                            </div>
-                        </div>
-                    `;
+                    analysisHtml += `<div class="analysis-item"><div style="display: flex; justify-content: space-between;"><span>${pred.className}</span><span>${Math.round(pred.probability * 100)}%</span></div><div class="confidence-bar"><div class="confidence-fill" style="width: ${pred.probability * 100}%"></div></div></div>`;
                 });
             }
-            
             if (op.aiAnalysis?.after) {
                 analysisHtml += '<h4 style="margin-top: 15px;">تحليل صورة العداد بعد:</h4>';
                 op.aiAnalysis.after.forEach(pred => {
-                    analysisHtml += `
-                        <div class="analysis-item">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>${pred.className}</span>
-                                <span>${Math.round(pred.probability * 100)}%</span>
-                            </div>
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${pred.probability * 100}%"></div>
-                            </div>
-                        </div>
-                    `;
+                    analysisHtml += `<div class="analysis-item"><div style="display: flex; justify-content: space-between;"><span>${pred.className}</span><span>${Math.round(pred.probability * 100)}%</span></div><div class="confidence-bar"><div class="confidence-fill" style="width: ${pred.probability * 100}%"></div></div></div>`;
                 });
             }
-            
             document.getElementById('analysisContent').innerHTML = analysisHtml || 'لا توجد بيانات تحليل';
-            
             document.getElementById('modalLocation').style.display = 'none';
             document.getElementById('modalMedia').style.display = 'none';
             document.getElementById('modalAnalysis').style.display = 'block';
@@ -2674,51 +2628,35 @@
         window.showDetails = async function(operationId) {
             const op = await getOperationById(operationId);
             if (!op) return;
-            
             document.getElementById('modalTitle').innerText = 'تفاصيل العملية';
-            
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
-                        
-                        document.getElementById('locationCoordinates').innerHTML = 
-                            `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
-                        
+                        document.getElementById('locationCoordinates').innerHTML = `خط العرض: ${lat.toFixed(6)}، خط الطول: ${lng.toFixed(6)}`;
                         setTimeout(() => {
-                            if (!map) {
-                                map = L.map('mapContainer').setView([lat, lng], 15);
-                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                            } else {
-                                map.setView([lat, lng], 15);
-                            }
-                            
+                            if (!map) { map = L.map('mapContainer').setView([lat, lng], 15); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); }
+                            else { map.setView([lat, lng], 15); }
                             if (currentMarker) map.removeLayer(currentMarker);
-                            currentMarker = L.marker([lat, lng]).addTo(map)
-                                .bindPopup('موقع التعبئة').openPopup();
+                            currentMarker = L.marker([lat, lng]).addTo(map).bindPopup('موقع التعبئة').openPopup();
                         }, 100);
                     },
                     () => {}
                 );
             }
-            
             let analysisHtml = '';
             if (op.aiAnalysis?.before) {
                 analysisHtml += '<h4>تحليل العداد قبل:</h4>';
-                op.aiAnalysis.before.forEach(pred => {
-                    analysisHtml += `<div>${pred.className}: ${Math.round(pred.probability * 100)}%</div>`;
-                });
+                op.aiAnalysis.before.forEach(pred => { analysisHtml += `<div>${pred.className}: ${Math.round(pred.probability * 100)}%</div>`; });
             }
             document.getElementById('analysisContent').innerHTML = analysisHtml || 'لا يوجد تحليل';
-            
             let mediaHtml = '';
             if (op.media?.plate) mediaHtml += `<a href="${op.media.plate}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> اللوحة</a>`;
             if (op.media?.before) mediaHtml += `<a href="${op.media.before}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> قبل</a>`;
             if (op.media?.after) mediaHtml += `<a href="${op.media.after}" target="_blank" class="media-preview-btn"><i class="fas fa-image"></i> بعد</a>`;
             if (op.media?.video) mediaHtml += `<a href="${op.media.video}" target="_blank" class="media-preview-btn video"><i class="fas fa-video"></i> فيديو</a>`;
             document.getElementById('mediaLinks').innerHTML = mediaHtml;
-            
             document.getElementById('modalLocation').style.display = 'block';
             document.getElementById('modalAnalysis').style.display = 'block';
             document.getElementById('modalMedia').style.display = 'block';
@@ -2727,6 +2665,10 @@
 
         window.closeModal = function() {
             document.getElementById('detailsModal').classList.remove('active');
+        };
+
+        window.closeChangePwModal = function() {
+            document.getElementById('changePwModal').classList.remove('active');
         };
 
         async function getOperationById(id) {
@@ -2763,50 +2705,53 @@
         };
 
         // ====================================================================
-        // SETUP DATABASE
+        // وظيفة تغيير كلمة المرور
+        // ====================================================================
+        async function changeAdminPassword(currentPw, newPw) {
+            const user = auth.currentUser;
+            if (!user) {
+                throw new Error("لا يوجد مستخدم مسجل الدخول");
+            }
+            // إعادة مصادقة المستخدم الحالي
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPw);
+            await user.reauthenticateWithCredential(credential);
+            await user.updatePassword(newPw);
+            return true;
+        }
+
+        // ====================================================================
+        // DATABASE SETUP & SAMPLE DATA
         // ====================================================================
         async function setupDatabase() {
             try {
                 const testRef = database.ref('.info/connected');
                 testRef.on('value', (snap) => {
-                    if (snap.val() === true) {
-                        console.log('✅ متصل بقاعدة البيانات');
-                    }
+                    if (snap.val() === true) console.log('✅ متصل بقاعدة البيانات');
                 });
             } catch (error) {
                 console.error('Setup error:', error);
             }
         }
 
-        // ====================================================================
-        // CREATE SAMPLE DATA
-        // ====================================================================
         async function createSampleData() {
             try {
                 const delegatesSnap = await database.ref('delegate_requests').once('value');
                 if (!delegatesSnap.exists()) {
-                    console.log('جاري إنشاء بيانات افتراضية للمندوبين...');
-                    
                     const sampleDelegates = [
-                        { username: 'أحمد محمد', email: 'ahmed@example.com', project: 'المراعي', region: 'الرياض', fuelType: 'ديزل', status: 'approved' },
-                        { username: 'خالد عبدالله', email: 'khalid@example.com', project: 'ناقل', region: 'جدة', fuelType: '91', status: 'approved' },
-                        { username: 'محمد علي', email: 'mohamed@example.com', project: 'ارامكس', region: 'الدمام', fuelType: 'ديزل', status: 'approved' },
-                        { username: 'سعيد أحمد', email: 'saeed@example.com', project: 'مناديل', region: 'مكة', fuelType: '91', status: 'approved' },
-                        { username: 'فهد عبدالرحمن', email: 'fahad@example.com', project: 'الطريق الذكي', region: 'تبوك', fuelType: 'ديزل', status: 'pending' }
+                        { username: 'أحمد محمد', email: 'ahmed@example.com', project: 'المراعي', region: 'الرياض', fuelType: 'ديزل', status: 'approved', createdAt: new Date().toISOString() },
+                        { username: 'خالد عبدالله', email: 'khalid@example.com', project: 'ناقل', region: 'جدة', fuelType: '91', status: 'approved', createdAt: new Date().toISOString() },
+                        { username: 'محمد علي', email: 'mohamed@example.com', project: 'ارامكس', region: 'الدمام', fuelType: 'ديزل', status: 'approved', createdAt: new Date().toISOString() },
+                        { username: 'سعيد أحمد', email: 'saeed@example.com', project: 'مناديل', region: 'مكة', fuelType: '91', status: 'approved', createdAt: new Date().toISOString() },
+                        { username: 'فهد عبدالرحمن', email: 'fahad@example.com', project: 'الطريق الذكي', region: 'تبوك', fuelType: 'ديزل', status: 'pending', createdAt: new Date().toISOString() }
                     ];
-                    
                     for (const delegate of sampleDelegates) {
                         const fakeUid = 'sample_' + Date.now() + Math.random();
                         await database.ref('delegate_requests/' + fakeUid).set(delegate);
                     }
-                    
                     console.log('✅ تم إنشاء 5 مندوبين تجريبيين');
                 }
-                
                 const opsSnap = await database.ref('operations').once('value');
                 if (!opsSnap.exists()) {
-                    console.log('جاري إنشاء عملية تجريبية...');
-                    
                     const sampleOp = {
                         delegateId: 'sample_1',
                         delegateName: 'أحمد محمد',
@@ -2814,22 +2759,14 @@
                         region: 'الرياض',
                         fuelType: 'ديزل',
                         timestamp: new Date().toISOString(),
-                        media: {
-                            plate: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Plate',
-                            before: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Before',
-                            after: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=After',
-                            video: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Video'
-                        },
+                        media: { plate: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Plate', before: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Before', after: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=After', video: 'https://via.placeholder.com/300x200/0a1a2f/38bdf8?text=Video' },
                         videoDuration: 30,
                         isSuspicious: false
                     };
-                    
                     await database.ref('operations').push(sampleOp);
                     console.log('✅ تم إنشاء عملية تجريبية واحدة');
                 }
-                
                 await loadAdminDashboard();
-                
             } catch (error) {
                 console.error('Error creating sample data:', error);
             }
@@ -2841,14 +2778,23 @@
         window.addEventListener('load', () => {
             setupDatabase();
             
-            // إنشاء حساب admin
-            auth.createUserWithEmailAndPassword('admin@al-zahrani.com', 'Admin@123')
+            // إنشاء حساب المدير الجديد (هوندا)
+            auth.createUserWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .then(() => {
-                    console.log('✅ تم إنشاء حساب المدير');
+                    console.log('✅ تم إنشاء حساب المدير الجديد (هوندا)');
                 })
                 .catch((error) => {
                     if (error.code === 'auth/email-already-in-use') {
                         console.log('✅ حساب المدير موجود مسبقاً');
+                        // محاولة تحديث كلمة المرور إذا لزم الأمر (للتأكد من استخدام الكلمة الجديدة)
+                        auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD).catch(async () => {
+                            // إذا فشل تسجيل الدخول بالكلمة الجديدة، ربما الكلمة قديمة، نقوم بتحديثها
+                            try {
+                                const user = await auth.signInWithEmailAndPassword(ADMIN_EMAIL, "Admin@123"); // الكلمة القديمة
+                                await user.user.updatePassword(ADMIN_PASSWORD);
+                                console.log('✅ تم تحديث كلمة مرور المدير إلى الجديدة');
+                            } catch(e) { console.log('لا يمكن تحديث كلمة المرور تلقائياً'); }
+                        });
                     }
                 });
             
@@ -2860,11 +2806,7 @@
                     AOS.init();
                     setLanguage(localStorage.getItem('preferredLang') || 'ar');
                     loadAIModel();
-                    
-                    // إنشاء بيانات تجريبية بعد 3 ثواني
-                    setTimeout(() => {
-                        createSampleData();
-                    }, 3000);
+                    setTimeout(() => { createSampleData(); }, 3000);
                 }, 500);
             }, 2000);
         });
@@ -2887,12 +2829,41 @@
         document.getElementById('startVideoBtn').addEventListener('click', startVideoRecording);
         document.getElementById('stopVideoBtn').addEventListener('click', stopVideoRecording);
         
-        // أزرار الحفظ
         document.getElementById('quickSaveBtn').addEventListener('click', quickSaveOperation);
         document.getElementById('saveRefuelOperationBtn').addEventListener('click', saveOperation);
         
         document.getElementById('delegateLogoutBtn').addEventListener('click', async () => { await auth.signOut(); showPage('DelegateLogin'); });
         document.getElementById('adminLogoutBtn').addEventListener('click', async () => { await auth.signOut(); showPage('DelegateLogin'); });
+        
+        // تغيير كلمة المرور
+        document.getElementById('changePasswordBtn').addEventListener('click', () => {
+            document.getElementById('changePwModal').classList.add('active');
+        });
+        
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPw = document.getElementById('currentPassword').value;
+            const newPw = document.getElementById('newPassword').value;
+            const confirmPw = document.getElementById('confirmPassword').value;
+            
+            if (newPw !== confirmPw) {
+                alert('كلمة المرور الجديدة وتأكيدها غير متطابقين');
+                return;
+            }
+            if (newPw.length < 6) {
+                alert('كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+            try {
+                await changeAdminPassword(currentPw, newPw);
+                alert('✅ تم تغيير كلمة المرور بنجاح');
+                closeChangePwModal();
+                document.getElementById('changePasswordForm').reset();
+            } catch (error) {
+                console.error('Change password error:', error);
+                alert('❌ فشل تغيير كلمة المرور: ' + (error.message || 'كلمة المرور الحالية غير صحيحة'));
+            }
+        });
         
         // PWA Install Buttons
         document.getElementById('installFab').addEventListener('click', installApp);
@@ -2908,14 +2879,12 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.getElementById('delegatesTab').classList.remove('hidden');
         });
-        
         document.getElementById('operationsTabBtn').addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.getElementById('operationsTab').classList.remove('hidden');
         });
-        
         document.getElementById('suspiciousTabBtn').addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
@@ -2926,107 +2895,61 @@
         // Signup
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             if (!document.getElementById('agreeTerms').checked) {
                 alert('الرجاء الموافقة على الشروط');
                 return;
             }
-            
             const username = document.getElementById('signupUsername').value;
             const password = document.getElementById('signupPassword').value;
             const email = document.getElementById('signupEmail').value || null;
-            
             try {
                 const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
-                if (usersSnap.exists()) {
-                    alert('❌ اسم المستخدم موجود بالفعل');
-                    return;
-                }
-                
+                if (usersSnap.exists()) { alert('❌ اسم المستخدم موجود بالفعل'); return; }
                 const userEmail = email || `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local`;
                 const user = await auth.createUserWithEmailAndPassword(userEmail, password);
-                
                 let project = document.getElementById('signupProject').value;
                 if (project === 'manual') project = document.getElementById('signupManualProject').value;
-                
                 let region = document.getElementById('signupRegion').value;
                 if (region === 'manual') region = document.getElementById('signupManualRegion').value;
-                
                 await database.ref('delegate_requests/' + user.user.uid).set({
-                    username: username,
-                    email: email || 'غير محدد',
-                    project: project,
-                    region: region,
-                    fuelType: document.getElementById('signupFuelType').value,
-                    status: 'pending',
-                    createdAt: new Date().toISOString(),
-                    uid: user.user.uid
+                    username: username, email: email || 'غير محدد', project: project, region: region,
+                    fuelType: document.getElementById('signupFuelType').value, status: 'pending',
+                    createdAt: new Date().toISOString(), uid: user.user.uid
                 });
-                
                 alert('✅ تم التسجيل بنجاح');
                 showPage('DelegateLogin');
-                
             } catch (error) {
                 console.error('Signup error:', error);
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    alert('❌ البريد الإلكتروني مستخدم بالفعل');
-                } else {
-                    alert('❌ خطأ: ' + error.message);
-                }
+                alert('❌ خطأ: ' + error.message);
             }
         });
         
         // Login
         document.getElementById('delegateLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            
             try {
-                if (username === 'admin') {
-                    const user = await auth.signInWithEmailAndPassword('admin@al-zahrani.com', password);
+                // تسجيل دخول المدير الجديد (هوندا)
+                if (username === ADMIN_USERNAME) {
+                    const user = await auth.signInWithEmailAndPassword(ADMIN_EMAIL, password);
                     showPage('AdminDashboard');
                     return;
                 }
-                
                 const usersSnap = await database.ref('delegate_requests').orderByChild('username').equalTo(username).once('value');
-                let userData = null;
-                let userId = null;
-                
-                usersSnap.forEach(child => {
-                    userData = child.val();
-                    userId = child.key;
-                });
-                
-                if (!userData) {
-                    alert('❌ اسم المستخدم غير موجود');
-                    return;
-                }
-                
-                const userEmail = userData.email === 'غير محدد' ? 
-                    `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local` : 
-                    userData.email;
-                
+                let userData = null, userId = null;
+                usersSnap.forEach(child => { userData = child.val(); userId = child.key; });
+                if (!userData) { alert('❌ اسم المستخدم غير موجود'); return; }
+                const userEmail = userData.email === 'غير محدد' ? `${username.replace(/\s+/g, '').toLowerCase()}@alzahrani.local` : userData.email;
                 const user = await auth.signInWithEmailAndPassword(userEmail, password);
-                
-                if (userData.status !== 'approved') {
-                    alert('❌ الحساب غير معتمد بعد');
-                    await auth.signOut();
-                    return;
-                }
-                
+                if (userData.status !== 'approved') { alert('❌ الحساب غير معتمد بعد'); await auth.signOut(); return; }
                 currentUser = user.user;
                 currentUserData = userData;
-                
                 document.getElementById('delegateNameSpan').innerText = userData.username;
                 document.getElementById('delegateProjectSpan').innerText = userData.project;
                 document.getElementById('delegateRegionSpan').innerText = userData.region;
                 document.getElementById('delegateFuelTypeSpan').innerText = userData.fuelType;
-                
                 showPage('DelegateRefuel');
-                
             } catch (error) {
                 console.error('Login error:', error);
                 alert('❌ خطأ في تسجيل الدخول: ' + error.message);
